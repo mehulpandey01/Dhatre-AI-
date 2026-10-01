@@ -21,6 +21,13 @@ from collections import defaultdict, Counter
 # Import baseline router
 import baseline
 
+# Import custom router
+try:
+    import router
+    ROUTER_AVAILABLE = True
+except ImportError:
+    ROUTER_AVAILABLE = False
+
 HERE = Path(__file__).parent
 
 
@@ -307,8 +314,10 @@ def main():
         system = sys.argv[2] if len(sys.argv) > 2 else 'baseline'
         if system == 'baseline':
             print_errors('BASELINE', baseline.route, labels)
+        elif system == 'router' and ROUTER_AVAILABLE:
+            print_errors('ROUTER', router.route, labels)
         else:
-            print(f"Error: router.py not implemented yet")
+            print(f"Error: {system} not available")
             sys.exit(1)
         return
     
@@ -317,8 +326,13 @@ def main():
     baseline_results = evaluate_system('BASELINE', baseline.route, labels)
     print_metrics('BASELINE', baseline_results, total)
     
-    # TODO: Evaluate router when router.py exists
-    print(f"\n\nRouter evaluation not yet implemented (router.py doesn't exist)")
+    # Evaluate router if available
+    if ROUTER_AVAILABLE:
+        print("\n\nEvaluating router...")
+        router_results = evaluate_system('ROUTER', router.route, labels)
+        print_metrics('ROUTER', router_results, total)
+    else:
+        print(f"\n\nRouter evaluation not yet implemented (router.py doesn't exist)")
 
 
 if __name__ == '__main__':
