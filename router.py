@@ -119,6 +119,13 @@ def route(query):
     if top_score > 5 and actual_shape == desired_shape:
         confidence = min(0.95, confidence + 0.1)
     
+    # Clamp confidence to 0..1
+    confidence = max(0.0, min(1.0, confidence))
+    
+    # If confidence too low, return needs_clarification
+    if confidence <= 0.3:
+        return (None, 0.0, 'needs_clarification: low confidence match')
+    
     return (top_tool, confidence, f'match: {top_tool} (entity={top_entity}, shape={desired_shape})')
 
 
