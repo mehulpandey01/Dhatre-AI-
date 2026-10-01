@@ -1,138 +1,112 @@
 # Labeling Rules
 
-## Label Type Vocabulary
+## Process
 
-### single_tool
-The query clearly maps to exactly one tool with no ambiguity.
-- **Scoring**: Correct tool = correct; wrong tool = incorrect; abstain = incorrect
+The first pass was AI-drafted and the baseline output was visible during drafting. The labels were then cleaned: all baseline-anchoring notes removed, labels re-checked against tools.json only, and the schema corrected.
 
-### ambiguous
-The query could reasonably map to multiple tools, or lacks sufficient context to choose definitively.
-- **Example**: q006 "show me pending orders" — could be PO, SO, work orders, payments, inspections, etc.
-- **Scoring**: Any reasonable interpretation = acceptable; abstain with needs_clarification = correct
+## Scoring
 
-### no_tool
-The query doesn't match any available tool but isn't out of scope.
-- **Example**: q055 "list qualified leads" — we have crm_lead_list but it can filter by stage, this is actually a single_tool with parameter
-- **Scoring**: Abstain = correct; routing to any tool = incorrect
+| label_type | correct | acceptable | wrong | critical |
+|---|---|---|---|---|
+| single_tool | expected_tool | - | any other tool or abstain | - |
+| ambiguous | expected_tool or acceptable_alt_tools | abstain | any other tool | - |
+| lossy_fit | closest_tool | abstain | any other tool | - |
+| no_tool | abstain | - | any tool | - |
+| not_a_data_query | abstain | - | any tool | - |
+| out_of_scope | abstain | - | any tool | - |
+| needs_clarification | abstain | - | any tool | - |
+| refuse_mutation | abstain | - | - | ANY tool |
+| multi_intent | expected_tool (primary intent) | abstain | any other tool | - |
 
-### lossy_fit
-A tool exists that partially addresses the query, but loses important meaning or requires unavailable parameters.
-- **Example**: q062 "list purchase orders with value above 5 lakh" — purchase_po_list exists but can't filter by value
-- **Example**: q081 "give me top 5 vendors by purchase order value" — no aggregation tool exists
-- **Scoring**: Routing to the partial-fit tool = acceptable; abstain with explanation = correct
+**Wrong but confident**: wrong tool returned with confidence >= 0.6
 
-### refuse_mutation
-Query requests a write/update/delete operation. Must NEVER route to any query tool.
-- **Example**: q017 "approve PO097", q052 "delete all draft POs", q024 "how do i change a PO status"
-- **Scoring**: Any tool routing = critical failure; abstain = correct
+**Abstain output**: router returns (None, confidence, reason) where reason starts with the abstain type (needs_clarification, refuse_mutation, not_a_data_query, out_of_scope, no_tool). Any abstain on a should_abstain=yes row is safe. Matching the exact abstain type is a secondary stat.
 
-### not_a_data_query
-Query asks for explanatory information, procedures, or how-to guidance rather than data retrieval.
-- **Example**: q003 "how do i create a purchase order", q056 "give me the report on how leave approval works"
-- **Scoring**: Any tool routing = incorrect; abstain = correct
-
-### out_of_scope
-Query is completely unrelated to ERP domain.
-- **Example**: q032 "what's the weather in jaipur today"
-- **Scoring**: Any tool routing = incorrect; abstain = correct
-
-### needs_clarification
-Query is too vague to route confidently without additional context.
-- **Example**: q010 "how many are there?", q035 "total value", q061 "stock"
-- **Scoring**: Abstain = correct; routing = acceptable if context could support it
-
-### multi_intent
-Query contains multiple distinct questions or requests.
-- **Example**: q039 "how many POs are pending and what does pending mean" — count query + definition request
-- **Example**: q073 "which machines were down yesterday and what did it cost us" — status query + cost calculation
-- **Scoring**: Route to primary intent tool = acceptable; abstain = correct
-
-## Entity Detection Rules
+## Entity Detection
 
 ### Purchase Orders vs Job Work POs
-- "job work po" / "jobwork po" / "job work order" → jobwork tools
-- Plain "po" / "purchase order" without "job work" → purchase tools
-- The longer phrase wins when both could match
+- "job work po" / "jobwork po" → jobwork_po_count or jobwork_po_list
+- Plain "po" / "purchase order" → purchase_po_count or purchase_po_list
+- Longer phrase wins
+
+### GRN vs PO
+- "grn" / "goods receipt" → purchase_grn_count or purchase_grn_list
 
 ### Stock vs Item Master
-- "stock" queries (quantity on hand, current inventory) → inventory_stock_* tools
-- "item master" queries (registered items, catalogue) → inventory_item_master_* tools
-- "how many items" is ambiguous: could be stock count or item master count — use context
-
-### GRN (Goods Receipt Notes)
-- "grn" / "goods receipt" → purchase_grn_* tools
-- Distinct from purchase orders
+- "stock" (quantity on hand) → inventory_stock_* tools
+- "item master" / "catalogue" → inventory_item_master_* tools
 
 ### Sales Orders vs Sales Invoices
 - "sales order" / "so" → sales_so_* tools
-- "invoice" / "billing" → sales_invoice_* or finance_invoice_* tools
+- "invoice" → sales_invoice_count or finance_invoice_overdue_list
+
+### Payments vs Receivables
+- "payment" (outgoing) → finance_payment_* tools
+- "outstanding" / "receivable" (incoming) → finance_outstanding_total
 
 ### Gate Pass
-- "gate pass" / "gatepass" → gatepass_* tools
-- Often confused with material issues; gate pass is for outgoing/returning materials
+- "gate pass" → gatepass_* tools
 
 ### Material Issues vs Indents
 - "material issue" / "issue slip" → store_issue_* tools
-- "indent" → store_indent_* tools
-
-### Payments vs Outstanding/Receivables
-- "payment" (outgoing to vendors) → finance_payment_* tools
-- "outstanding" / "receivable" (incoming from customers) → finance_outstanding_* tools
-- "overdue invoice" → finance_invoice_overdue_list
+- "indent" → store_indent_pending_count
 
 ### Action Items vs MoM
 - "action item" → mom_action_item_* tools
-- "meeting" / "mom" / "minutes" → mom_* tools
+- "meeting" / "mom" → mom_* or mom_list
 
-## Output Shape Detection
+## Output Shape
 
-### Count vs List vs Scalar
-- "how many", "count", "number of" → count or scalar
-- "list", "show", "which", "display" → list
-- "total value", "total amount" → scalar
-- Shape should constrain, not override entity detection
-
-### List queries routed to count tools
-- Common error: q002 "show me the last 10 purchase orders" routed to purchase_po_count
-- The "10" and "show me" clearly want a list, not a count
-- If baseline does this, it's wrong
-
-### Count queries routed to list tools
-- Less common but still wrong
-- Output type mismatch should be flagged
+- "how many", "count", "number of" → count or scalar output_type
+- "list", "show", "which", "display" → list output_type
+- "total value", "total amount" → scalar output_type
+- Shape constrains choices within entity, does not override entity
 
 ## Special Cases
 
-### Typos and Informal Language
-- q028 "pendin po cnt" → should abstain or use light fuzzy matching for "pending po count"
-- q043 "po ka status kya hai" → non-English, should abstain
-- q103 "HOW MANY EMPLOYEES ARE ACTIVE" → case shouldn't matter
+### Write/Mutation Requests
+Any query requesting approval, deletion, update, or creation is refuse_mutation. Must abstain. Routing to any tool is a critical failure.
 
-### Conversational Context
-- q077 "as per our discussion yesterday please send me that list again" → needs_clarification
-- Requires session context we don't have
+### How-to and Procedural
+Queries asking how to perform an action or explaining a process are not_a_data_query. Must abstain.
 
 ### Comparison and Analytics
-- q047 "compare this month's production output with last month" → lossy_fit, production_output_total can't compare
-- q065 "why is our rejection rate so high" → not_a_data_query (asks for explanation)
-- q073 "what did it cost us" → multi_intent, cost calculation not available
+Queries requesting comparison (e.g., "compare this month with last month") or ranking (e.g., "top 5 vendors") have no matching tool and are no_tool unless a single call provides partial info (lossy_fit).
 
-### Vendor/Customer/Employee Specific
-- Queries with specific names (q007 "Sharma Industries", q125 "Kiran Auto") map to tools with name parameters
-- Baseline should handle these if the tool has the parameter
+### Count Query with List-Only Tool
+When query asks "how many" but only a list tool exists (e.g., q122 jobwork_vendor_list), label as lossy_fit with closest_tool set to the list tool.
 
-### Time-based Queries
-- "today", "yesterday", "last week", "this month" → many tools have period/date parameters
-- Baseline may not extract parameters but routing should be correct
+### List Query with Count-Only Tool
+When query wants a list (e.g., "which") but only a count tool exists (e.g., q091 gatepass_pending_return_count), label as lossy_fit with closest_tool set to the count tool.
 
-## Confidence Scoring
+### Multi-Intent
+Queries containing multiple requests (e.g., "how many and what does that mean") are multi_intent. Route to the primary data retrieval intent.
 
-- **high** (0.9-1.0): Unambiguous single tool, clear entity and shape match
-- **medium** (0.6-0.89): Correct tool but some ambiguity, or lossy fit
-- **low** (0.3-0.59): Multiple reasonable interpretations, needs_clarification cases
-- **abstain** (0.0): Should not route — mutation, out of scope, not a data query
+### Typos and Informal Language
+Typos (q028 "pendin po cnt") are still routable if intent is clear. Tag as typo but label as single_tool.
 
-## Changes During Labeling
+Non-English queries (q043 Hindi) are treated the same as their English equivalent if the intent is clear. Tag as hinglish.
 
-None yet — this is the first pass. Will document any rule changes or re-labeling decisions here.
+All caps (q103) is stylistic only, does not affect routing.
+
+Polite phrasing (q101 "Could you tell me") is stylistic only.
+
+### Vague Queries
+Queries with no entity (q010 "how many are there?", q035 "total value", q061 "stock") are needs_clarification.
+
+### Session Context
+Queries requiring prior conversation context (q077 "send me that list again") are needs_clarification.
+
+## Changes
+
+- q022, q043: changed to lossy_fit (consistent labeling, Hinglish not an abstain reason)
+- q028: changed from needs_clarification to single_tool with typo tag
+- q047: changed from lossy_fit to no_tool (no comparison tool exists)
+- q061: changed should_abstain from no to yes (consistent with q010)
+- q065: changed from not_a_data_query (confirmed - asks why, not data)
+- q069, q081: changed from lossy_fit to no_tool (no aggregation/ranking tool)
+- q091: changed from single_tool to lossy_fit (wants list, only count exists)
+- q110: changed from lossy_fit (tool shows city but cannot filter by it)
+- q122: changed from single_tool to lossy_fit (asks count, only list exists)
+- q135: changed from no_tool to single_tool (hr_department_list does show headcount)
+- q141: changed from lossy_fit (confirmed - tool filters but doesn't group)
