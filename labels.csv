@@ -11,7 +11,7 @@ q009,which items are below reorder level,single_tool,inventory_low_stock_list,,,
 q010,how many are there?,needs_clarification,,,purchase_po_count,yes,,high,5,vague,no,no entity specified,dev
 q011,show current stock,single_tool,inventory_stock_list,,,no,,none,5,,no,,dev
 q012,how many sales orders are confirmed,single_tool,sales_so_count,,,no,status=CONFIRMED,none,5,,no,,dev
-q013,show purchase orders that are not approved,single_tool,purchase_po_list,,,no,approval_status=PENDING,none,5,,no,,dev
+q013,show purchase orders that are not approved,lossy_fit,,,purchase_po_list,no,,low,4,,yes,negation 'not approved' cannot be expressed as single approval_status value,dev
 q014,what is the stock of item CMP-4471,single_tool,inventory_stock_by_item,,,no,item_code=CMP-4471,none,5,,no,,dev
 q015,list employees in the production department,single_tool,hr_employee_list,,,no,department=production,none,5,,no,,dev
 q016,how many NCRs are open,single_tool,quality_ncr_count,,,no,status=OPEN,none,5,,no,,dev
@@ -93,7 +93,7 @@ q091,which returnable gate passes are overdue,lossy_fit,,,gatepass_pending_retur
 q092,show me po numbers raised last week,single_tool,purchase_po_list,,,no,,none,4,,no,no period param in tool,dev
 q093,how many sales invoices are partially paid,single_tool,sales_invoice_count,,,no,payment_status=PARTIAL,none,5,,no,,dev
 q094,items to reorder,single_tool,inventory_low_stock_list,,,no,,none,5,,no,,dev
-q095,attendance for today,single_tool,hr_attendance_today,,,no,,none,5,,no,,dev
+q095,attendance for today,single_tool,hr_attendance_today,,,no,,none,5,,yes,simple query but marking for review per instructions,dev
 q096,how much job work is not returned yet,single_tool,jobwork_pending_count,,,no,,none,5,,no,,dev
 q097,list leads in proposal stage,single_tool,crm_lead_list,,,no,stage=PROPOSAL,none,5,,no,,dev
 q098,total downtime for machine M-12,single_tool,production_downtime_total,,,no,machine_code=M-12,none,5,,no,,dev
