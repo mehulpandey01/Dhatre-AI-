@@ -206,6 +206,17 @@ def score_entities(tokens, query):
     """Layer 2: Score entities with phrase weighting."""
     entity_scores = {}
     
+    # Check for employee-related queries (department context)
+    # Must be checked before other entities to prevent "production/quality department" misrouting
+    employee_indicators = ['employee', 'employees', 'who', 'headcount', 'staff']
+    department_words = ['department', 'dept']
+    has_employee_context = any(ind in query for ind in employee_indicators)
+    has_department = any(dw in query for dw in department_words)
+    
+    if has_employee_context or (has_department and not any(w in query for w in ['list', 'show', 'which']) ):
+        # Boost Employees entity heavily
+        entity_scores['Employees'] = entity_scores.get('Employees', 0) + 15
+    
     # Multi-word phrases get higher weight
     phrases_by_length = {
         3: ['job work po', 'job work order', 'job work purchase', 'gate pass', 
@@ -234,6 +245,11 @@ def score_entities(tokens, query):
     # Single-word entity detection with stemming/plural handling
     for tool in TOOLS.values():
         entity = tool.get('entity', '')
+        
+        # Skip non-employee entities if we have strong employee context
+        if has_employee_context and entity not in ['Employees', 'Departments', 'Attendance', 'Leave Requests']:
+            continue
+        
         for kw in tool.get('keywords', []):
             kw_lower = kw.lower()
             # Check if keyword appears in query (exact or with simple plural/stem match)
