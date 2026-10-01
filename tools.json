@@ -1,0 +1,1328 @@
+{
+  "purchase_po_count": {
+    "id": "purchase_po_count",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "Count purchase orders, optionally filtered by approval status or PO type",
+    "keywords": [
+      "purchase order",
+      "po",
+      "vendor order",
+      "how many po",
+      "number of po",
+      "pending approval",
+      "approved po",
+      "rejected po",
+      "draft po",
+      "open po",
+      "fixed po",
+      "how many open po",
+      "count of open po",
+      "open purchase order",
+      "count of po"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "approval_status": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "REJECTED",
+        "BILLED",
+        "UNBILLED",
+        "EXPIRED"
+      ],
+      "po_type": [
+        "OPEN",
+        "FIXED"
+      ]
+    }
+  },
+  "purchase_po_list": {
+    "id": "purchase_po_list",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "List purchase orders with number, vendor, date, value and approval status",
+    "keywords": [
+      "list purchase order",
+      "show purchase order",
+      "purchase order list",
+      "po list",
+      "show po",
+      "list po",
+      "po details",
+      "purchase order details",
+      "which purchase order",
+      "po numbers"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "approval_status": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "REJECTED",
+        "BILLED",
+        "UNBILLED",
+        "EXPIRED"
+      ],
+      "limit": "int"
+    }
+  },
+  "purchase_po_total_value": {
+    "id": "purchase_po_total_value",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "Total monetary value of purchase orders, filtered by approval status",
+    "keywords": [
+      "total value of purchase order",
+      "total purchase order value",
+      "purchase order amount",
+      "total po value",
+      "po amount",
+      "total spend",
+      "purchase spend",
+      "total value",
+      "value of approved",
+      "purchase order value",
+      "total approved"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "approval_status": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ]
+    }
+  },
+  "purchase_po_by_vendor": {
+    "id": "purchase_po_by_vendor",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "List purchase orders raised against a specific vendor",
+    "keywords": [
+      "po for vendor",
+      "purchase order for vendor",
+      "vendor purchase order",
+      "orders from vendor",
+      "po raised to",
+      "purchase order by vendor",
+      "vendor wise po"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "vendor_name": "string",
+      "limit": "int"
+    }
+  },
+  "purchase_po_pending_approval_list": {
+    "id": "purchase_po_pending_approval_list",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "List purchase orders currently awaiting approval, oldest first",
+    "keywords": [
+      "pending approval po",
+      "po awaiting approval",
+      "purchase order pending approval",
+      "po waiting for approval",
+      "unapproved purchase order",
+      "po stuck in approval"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "purchase_po_expiring": {
+    "id": "purchase_po_expiring",
+    "module": "purchase",
+    "entity": "Purchase Orders",
+    "description": "List open purchase orders expiring within a given number of days",
+    "keywords": [
+      "po expiring",
+      "purchase order expiring",
+      "expiring purchase order",
+      "po about to expire",
+      "purchase order validity",
+      "po expiry"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "days": "int"
+    }
+  },
+  "purchase_grn_count": {
+    "id": "purchase_grn_count",
+    "module": "purchase",
+    "entity": "Goods Receipt Notes",
+    "description": "Count goods receipt notes, optionally filtered by status",
+    "keywords": [
+      "grn",
+      "goods receipt",
+      "goods receipt note",
+      "how many grn",
+      "number of grn",
+      "grn count",
+      "material receipt"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "DRAFT",
+        "POSTED",
+        "CANCELLED"
+      ]
+    }
+  },
+  "purchase_grn_list": {
+    "id": "purchase_grn_list",
+    "module": "purchase",
+    "entity": "Goods Receipt Notes",
+    "description": "List goods receipt notes with GRN number, PO reference, date and status",
+    "keywords": [
+      "list grn",
+      "show grn",
+      "grn list",
+      "goods receipt list",
+      "grn details",
+      "which grn"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "inventory_stock_count": {
+    "id": "inventory_stock_count",
+    "module": "inventory",
+    "entity": "Stock Items",
+    "description": "Count distinct stock items held in inventory",
+    "keywords": [
+      "how many stock item",
+      "number of stock item",
+      "count of item",
+      "stock item count",
+      "how many item in stock",
+      "item count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "warehouse": "string"
+    }
+  },
+  "inventory_stock_list": {
+    "id": "inventory_stock_list",
+    "module": "inventory",
+    "entity": "Stock Items",
+    "description": "List stock items with code, description, quantity on hand and unit",
+    "keywords": [
+      "list stock",
+      "show stock",
+      "stock list",
+      "inventory list",
+      "show inventory",
+      "list inventory",
+      "stock details",
+      "stock on hand",
+      "current stock"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "warehouse": "string",
+      "limit": "int"
+    }
+  },
+  "inventory_stock_by_item": {
+    "id": "inventory_stock_by_item",
+    "module": "inventory",
+    "entity": "Stock Items",
+    "description": "Current stock quantity for one specific item code or description",
+    "keywords": [
+      "stock of",
+      "quantity of",
+      "how much stock",
+      "stock for item",
+      "available quantity",
+      "qty of",
+      "stock level of"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "item_code": "string"
+    }
+  },
+  "inventory_low_stock_list": {
+    "id": "inventory_low_stock_list",
+    "module": "inventory",
+    "entity": "Stock Items",
+    "description": "List items whose quantity has fallen below their reorder level",
+    "keywords": [
+      "low stock",
+      "below reorder",
+      "reorder level",
+      "stock shortage",
+      "running low",
+      "items to reorder",
+      "short stock",
+      "shortage list"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "inventory_stock_value_total": {
+    "id": "inventory_stock_value_total",
+    "module": "inventory",
+    "entity": "Stock Items",
+    "description": "Total monetary valuation of all stock currently held",
+    "keywords": [
+      "total stock value",
+      "inventory value",
+      "value of inventory",
+      "stock valuation",
+      "total inventory value",
+      "worth of stock"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "warehouse": "string"
+    }
+  },
+  "inventory_item_master_count": {
+    "id": "inventory_item_master_count",
+    "module": "inventory",
+    "entity": "Item Master",
+    "description": "Count items registered in the item master, optionally by category",
+    "keywords": [
+      "item master",
+      "how many item master",
+      "registered item",
+      "master item count",
+      "item master count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "category": "string"
+    }
+  },
+  "inventory_item_master_list": {
+    "id": "inventory_item_master_list",
+    "module": "inventory",
+    "entity": "Item Master",
+    "description": "List items from the item master with code, description and category",
+    "keywords": [
+      "list item master",
+      "show item master",
+      "item master list",
+      "list all item",
+      "item catalogue",
+      "item catalog"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "category": "string",
+      "limit": "int"
+    }
+  },
+  "sales_so_count": {
+    "id": "sales_so_count",
+    "module": "sales",
+    "entity": "Sales Orders",
+    "description": "Count sales orders, optionally filtered by status",
+    "keywords": [
+      "sales order",
+      "so",
+      "how many sales order",
+      "number of sales order",
+      "customer order",
+      "sales order count",
+      "count of sales order"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "DRAFT",
+        "CONFIRMED",
+        "DISPATCHED",
+        "CLOSED",
+        "CANCELLED"
+      ]
+    }
+  },
+  "sales_so_list": {
+    "id": "sales_so_list",
+    "module": "sales",
+    "entity": "Sales Orders",
+    "description": "List sales orders with number, customer, date, value and status",
+    "keywords": [
+      "list sales order",
+      "show sales order",
+      "sales order list",
+      "so list",
+      "show so",
+      "sales order details",
+      "which sales order"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "DRAFT",
+        "CONFIRMED",
+        "DISPATCHED",
+        "CLOSED",
+        "CANCELLED"
+      ],
+      "limit": "int"
+    }
+  },
+  "sales_so_total_value": {
+    "id": "sales_so_total_value",
+    "module": "sales",
+    "entity": "Sales Orders",
+    "description": "Total monetary value of sales orders for a period or status",
+    "keywords": [
+      "total sales value",
+      "sales order value",
+      "total sales order value",
+      "sales revenue",
+      "total revenue",
+      "value of sales order",
+      "sales amount"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "status": [
+        "CONFIRMED",
+        "DISPATCHED",
+        "CLOSED"
+      ],
+      "period": "string"
+    }
+  },
+  "sales_customer_count": {
+    "id": "sales_customer_count",
+    "module": "sales",
+    "entity": "Customers",
+    "description": "Count registered customers, optionally filtered by active status",
+    "keywords": [
+      "how many customer",
+      "number of customer",
+      "customer count",
+      "count of customer",
+      "active customer count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "active": "bool"
+    }
+  },
+  "sales_customer_list": {
+    "id": "sales_customer_list",
+    "module": "sales",
+    "entity": "Customers",
+    "description": "List customers with name, code, city and active status",
+    "keywords": [
+      "list customer",
+      "show customer",
+      "customer list",
+      "which customer",
+      "customer details",
+      "all customer"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "active": "bool",
+      "limit": "int"
+    }
+  },
+  "sales_invoice_count": {
+    "id": "sales_invoice_count",
+    "module": "sales",
+    "entity": "Sales Invoices",
+    "description": "Count sales invoices, optionally filtered by payment status",
+    "keywords": [
+      "sales invoice",
+      "how many invoice",
+      "invoice count",
+      "number of invoice",
+      "count of invoice",
+      "billing count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "payment_status": [
+        "PAID",
+        "UNPAID",
+        "PARTIAL"
+      ]
+    }
+  },
+  "hr_employee_count": {
+    "id": "hr_employee_count",
+    "module": "hr",
+    "entity": "Employees",
+    "description": "Count employees, optionally filtered by department or employment status",
+    "keywords": [
+      "how many employee",
+      "number of employee",
+      "employee count",
+      "staff count",
+      "headcount",
+      "total employee",
+      "count of employee",
+      "how many staff"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "department": "string",
+      "status": [
+        "ACTIVE",
+        "INACTIVE",
+        "RESIGNED"
+      ]
+    }
+  },
+  "hr_employee_list": {
+    "id": "hr_employee_list",
+    "module": "hr",
+    "entity": "Employees",
+    "description": "List employees with code, name, department, designation and joining date",
+    "keywords": [
+      "list employee",
+      "show employee",
+      "employee list",
+      "staff list",
+      "which employee",
+      "employee details",
+      "all employee"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "department": "string",
+      "limit": "int"
+    }
+  },
+  "hr_attendance_today": {
+    "id": "hr_attendance_today",
+    "module": "hr",
+    "entity": "Attendance",
+    "description": "Count employees present, absent or on leave for a given date",
+    "keywords": [
+      "attendance today",
+      "who is present",
+      "present today",
+      "absent today",
+      "attendance count",
+      "how many present",
+      "today attendance",
+      "attendance for today"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "date": "string",
+      "status": [
+        "PRESENT",
+        "ABSENT",
+        "LEAVE"
+      ]
+    }
+  },
+  "hr_leave_pending_count": {
+    "id": "hr_leave_pending_count",
+    "module": "hr",
+    "entity": "Leave Requests",
+    "description": "Count leave requests awaiting approval",
+    "keywords": [
+      "pending leave",
+      "leave pending approval",
+      "how many leave request",
+      "leave awaiting approval",
+      "unapproved leave",
+      "pending leave request"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "department": "string"
+    }
+  },
+  "hr_leave_list": {
+    "id": "hr_leave_list",
+    "module": "hr",
+    "entity": "Leave Requests",
+    "description": "List leave requests with employee, type, dates and approval status",
+    "keywords": [
+      "list leave",
+      "show leave",
+      "leave list",
+      "leave request list",
+      "who is on leave",
+      "leave details",
+      "leave applications"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ],
+      "limit": "int"
+    }
+  },
+  "hr_department_list": {
+    "id": "hr_department_list",
+    "module": "hr",
+    "entity": "Departments",
+    "description": "List departments with name, code and employee headcount",
+    "keywords": [
+      "list department",
+      "show department",
+      "department list",
+      "which department",
+      "all department",
+      "department wise headcount"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "hr_new_joiners_list": {
+    "id": "hr_new_joiners_list",
+    "module": "hr",
+    "entity": "Employees",
+    "description": "List employees who joined within a recent period",
+    "keywords": [
+      "new joiner",
+      "recently joined",
+      "new employee",
+      "joined last month",
+      "new hire",
+      "recent joining",
+      "who joined"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "days": "int",
+      "limit": "int"
+    }
+  },
+  "quality_ncr_count": {
+    "id": "quality_ncr_count",
+    "module": "quality",
+    "entity": "Non Conformance Reports",
+    "description": "Count non conformance reports, optionally filtered by status or severity",
+    "keywords": [
+      "ncr",
+      "non conformance",
+      "how many ncr",
+      "ncr count",
+      "number of ncr",
+      "non conformance report",
+      "count of ncr"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "OPEN",
+        "CLOSED",
+        "IN_PROGRESS"
+      ],
+      "severity": [
+        "MINOR",
+        "MAJOR",
+        "CRITICAL"
+      ]
+    }
+  },
+  "quality_ncr_list": {
+    "id": "quality_ncr_list",
+    "module": "quality",
+    "entity": "Non Conformance Reports",
+    "description": "List non conformance reports with number, item, severity and status",
+    "keywords": [
+      "list ncr",
+      "show ncr",
+      "ncr list",
+      "non conformance list",
+      "which ncr",
+      "ncr details",
+      "open ncr list"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "OPEN",
+        "CLOSED",
+        "IN_PROGRESS"
+      ],
+      "limit": "int"
+    }
+  },
+  "quality_inspection_pending_count": {
+    "id": "quality_inspection_pending_count",
+    "module": "quality",
+    "entity": "Inspections",
+    "description": "Count inspections awaiting completion",
+    "keywords": [
+      "pending inspection",
+      "inspection pending",
+      "how many inspection",
+      "inspection awaiting",
+      "incomplete inspection",
+      "inspection backlog"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "inspection_type": [
+        "INCOMING",
+        "IN_PROCESS",
+        "FINAL"
+      ]
+    }
+  },
+  "quality_inspection_list": {
+    "id": "quality_inspection_list",
+    "module": "quality",
+    "entity": "Inspections",
+    "description": "List inspections with reference, item, type, inspector and result",
+    "keywords": [
+      "list inspection",
+      "show inspection",
+      "inspection list",
+      "inspection details",
+      "which inspection",
+      "inspection report list"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "result": [
+        "PASS",
+        "FAIL",
+        "PENDING"
+      ],
+      "limit": "int"
+    }
+  },
+  "quality_rejection_rate": {
+    "id": "quality_rejection_rate",
+    "module": "quality",
+    "entity": "Inspections",
+    "description": "Rejection rate as a percentage of inspected quantity for a period",
+    "keywords": [
+      "rejection rate",
+      "reject percentage",
+      "rejection percentage",
+      "quality rate",
+      "percentage rejected",
+      "rejection ratio"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "period": "string"
+    }
+  },
+  "quality_coa_count": {
+    "id": "quality_coa_count",
+    "module": "quality",
+    "entity": "Certificates of Analysis",
+    "description": "Count certificates of analysis issued",
+    "keywords": [
+      "coa",
+      "certificate of analysis",
+      "how many coa",
+      "coa count",
+      "number of coa"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "ISSUED",
+        "PENDING"
+      ]
+    }
+  },
+  "production_workorder_count": {
+    "id": "production_workorder_count",
+    "module": "production",
+    "entity": "Work Orders",
+    "description": "Count production work orders, optionally filtered by status",
+    "keywords": [
+      "work order",
+      "how many work order",
+      "work order count",
+      "number of work order",
+      "wo count",
+      "production order count",
+      "count of work order"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "PLANNED",
+        "RELEASED",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "CLOSED"
+      ]
+    }
+  },
+  "production_workorder_list": {
+    "id": "production_workorder_list",
+    "module": "production",
+    "entity": "Work Orders",
+    "description": "List production work orders with number, item, quantity, status and due date",
+    "keywords": [
+      "list work order",
+      "show work order",
+      "work order list",
+      "wo list",
+      "production order list",
+      "which work order",
+      "work order details"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "PLANNED",
+        "RELEASED",
+        "IN_PROGRESS",
+        "COMPLETED",
+        "CLOSED"
+      ],
+      "limit": "int"
+    }
+  },
+  "production_output_total": {
+    "id": "production_output_total",
+    "module": "production",
+    "entity": "Production Output",
+    "description": "Total produced quantity for a period, optionally by item or line",
+    "keywords": [
+      "production output",
+      "total production",
+      "how much produced",
+      "output quantity",
+      "produced quantity",
+      "total output",
+      "production quantity"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "period": "string",
+      "item_code": "string"
+    }
+  },
+  "production_machine_status_list": {
+    "id": "production_machine_status_list",
+    "module": "production",
+    "entity": "Machines",
+    "description": "List machines with current running status and last update time",
+    "keywords": [
+      "machine status",
+      "list machine",
+      "show machine",
+      "machine list",
+      "which machine",
+      "running machine",
+      "machine state"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "RUNNING",
+        "IDLE",
+        "DOWN",
+        "MAINTENANCE"
+      ],
+      "limit": "int"
+    }
+  },
+  "production_downtime_total": {
+    "id": "production_downtime_total",
+    "module": "production",
+    "entity": "Downtime",
+    "description": "Total machine downtime in minutes for a period",
+    "keywords": [
+      "downtime",
+      "total downtime",
+      "machine downtime",
+      "how much downtime",
+      "breakdown time",
+      "downtime minutes"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "period": "string",
+      "machine_code": "string"
+    }
+  },
+  "production_shift_output": {
+    "id": "production_shift_output",
+    "module": "production",
+    "entity": "Production Output",
+    "description": "Production output broken down by shift",
+    "keywords": [
+      "shift wise production",
+      "shift output",
+      "production by shift",
+      "shift wise output",
+      "output per shift",
+      "shift production"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "date": "string"
+    }
+  },
+  "production_wip_count": {
+    "id": "production_wip_count",
+    "module": "production",
+    "entity": "Work In Progress",
+    "description": "Count items currently in work in progress",
+    "keywords": [
+      "wip",
+      "work in progress",
+      "how many wip",
+      "wip count",
+      "items in progress",
+      "work in progress count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "line": "string"
+    }
+  },
+  "mom_count": {
+    "id": "mom_count",
+    "module": "mom",
+    "entity": "Minutes of Meeting",
+    "description": "Count minutes of meeting records for a period",
+    "keywords": [
+      "mom count",
+      "how many mom",
+      "minutes of meeting count",
+      "number of mom",
+      "how many meeting",
+      "meeting count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "period": "string"
+    }
+  },
+  "mom_list": {
+    "id": "mom_list",
+    "module": "mom",
+    "entity": "Minutes of Meeting",
+    "description": "List minutes of meeting with title, date, organiser and attendee count",
+    "keywords": [
+      "list mom",
+      "show mom",
+      "mom list",
+      "minutes of meeting list",
+      "which meeting",
+      "meeting list",
+      "recent meeting"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "mom_action_item_count": {
+    "id": "mom_action_item_count",
+    "module": "mom",
+    "entity": "Action Items",
+    "description": "Count action items from meetings, optionally filtered by status",
+    "keywords": [
+      "action item count",
+      "how many action item",
+      "pending action item",
+      "number of action item",
+      "open action item"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "OPEN",
+        "IN_PROGRESS",
+        "DONE",
+        "OVERDUE"
+      ]
+    }
+  },
+  "mom_action_item_list": {
+    "id": "mom_action_item_list",
+    "module": "mom",
+    "entity": "Action Items",
+    "description": "List meeting action items with owner, due date and status",
+    "keywords": [
+      "list action item",
+      "show action item",
+      "action item list",
+      "action items for",
+      "my action item",
+      "which action item",
+      "task from meeting"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "OPEN",
+        "IN_PROGRESS",
+        "DONE",
+        "OVERDUE"
+      ],
+      "owner": "string",
+      "limit": "int"
+    }
+  },
+  "jobwork_po_count": {
+    "id": "jobwork_po_count",
+    "module": "jobwork",
+    "entity": "Job Work Purchase Orders",
+    "description": "Count job work purchase orders, optionally filtered by status",
+    "keywords": [
+      "job work po",
+      "jobwork po",
+      "how many job work",
+      "job work order count",
+      "job work purchase order",
+      "count of job work po"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "status": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "CLOSED"
+      ]
+    }
+  },
+  "jobwork_po_list": {
+    "id": "jobwork_po_list",
+    "module": "jobwork",
+    "entity": "Job Work Purchase Orders",
+    "description": "List job work purchase orders with number, vendor, item and status",
+    "keywords": [
+      "list job work po",
+      "show job work",
+      "job work list",
+      "job work po list",
+      "jobwork list",
+      "which job work"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "DRAFT",
+        "PENDING",
+        "APPROVED",
+        "CLOSED"
+      ],
+      "limit": "int"
+    }
+  },
+  "jobwork_pending_count": {
+    "id": "jobwork_pending_count",
+    "module": "jobwork",
+    "entity": "Job Work Purchase Orders",
+    "description": "Count job work orders pending return from the vendor",
+    "keywords": [
+      "job work pending",
+      "pending job work",
+      "job work not returned",
+      "outstanding job work",
+      "job work awaited"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "vendor_name": "string"
+    }
+  },
+  "jobwork_vendor_list": {
+    "id": "jobwork_vendor_list",
+    "module": "jobwork",
+    "entity": "Job Work Vendors",
+    "description": "List vendors registered for job work with their process capability",
+    "keywords": [
+      "job work vendor",
+      "jobwork vendor",
+      "list job work vendor",
+      "which job work vendor",
+      "job work supplier list"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "gatepass_count": {
+    "id": "gatepass_count",
+    "module": "gatepass",
+    "entity": "Gate Passes",
+    "description": "Count gate passes issued, optionally filtered by type or status",
+    "keywords": [
+      "gate pass count",
+      "how many gate pass",
+      "gatepass count",
+      "number of gate pass",
+      "count of gate pass"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "gatepass_type": [
+        "RETURNABLE",
+        "NON_RETURNABLE"
+      ],
+      "status": [
+        "OPEN",
+        "CLOSED"
+      ]
+    }
+  },
+  "gatepass_list": {
+    "id": "gatepass_list",
+    "module": "gatepass",
+    "entity": "Gate Passes",
+    "description": "List gate passes with number, type, party, date and status",
+    "keywords": [
+      "list gate pass",
+      "show gate pass",
+      "gate pass list",
+      "gatepass list",
+      "which gate pass",
+      "gate pass details"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "OPEN",
+        "CLOSED"
+      ],
+      "limit": "int"
+    }
+  },
+  "gatepass_pending_return_count": {
+    "id": "gatepass_pending_return_count",
+    "module": "gatepass",
+    "entity": "Gate Passes",
+    "description": "Count returnable gate passes whose material has not yet come back",
+    "keywords": [
+      "gate pass pending return",
+      "returnable pending",
+      "material not returned",
+      "pending gate pass return",
+      "overdue gate pass"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "days": "int"
+    }
+  },
+  "store_issue_count": {
+    "id": "store_issue_count",
+    "module": "store",
+    "entity": "Material Issues",
+    "description": "Count material issue slips raised from the store",
+    "keywords": [
+      "material issue count",
+      "how many issue slip",
+      "store issue count",
+      "number of material issue",
+      "issue slip count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "period": "string"
+    }
+  },
+  "store_issue_list": {
+    "id": "store_issue_list",
+    "module": "store",
+    "entity": "Material Issues",
+    "description": "List material issue slips with number, item, quantity and requesting department",
+    "keywords": [
+      "list material issue",
+      "show material issue",
+      "issue slip list",
+      "store issue list",
+      "which material issue"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "limit": "int"
+    }
+  },
+  "store_indent_pending_count": {
+    "id": "store_indent_pending_count",
+    "module": "store",
+    "entity": "Indents",
+    "description": "Count purchase indents awaiting conversion or approval",
+    "keywords": [
+      "pending indent",
+      "indent pending",
+      "how many indent",
+      "open indent",
+      "indent awaiting approval",
+      "unconverted indent"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "department": "string"
+    }
+  },
+  "finance_payment_pending_count": {
+    "id": "finance_payment_pending_count",
+    "module": "finance",
+    "entity": "Payments",
+    "description": "Count vendor payments pending release",
+    "keywords": [
+      "pending payment",
+      "payment pending",
+      "how many payment pending",
+      "unpaid vendor",
+      "payment due count",
+      "outstanding payment count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "vendor_name": "string"
+    }
+  },
+  "finance_payment_list": {
+    "id": "finance_payment_list",
+    "module": "finance",
+    "entity": "Payments",
+    "description": "List payments with reference, party, amount, date and status",
+    "keywords": [
+      "list payment",
+      "show payment",
+      "payment list",
+      "payment details",
+      "which payment",
+      "recent payment"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "status": [
+        "PENDING",
+        "RELEASED",
+        "FAILED"
+      ],
+      "limit": "int"
+    }
+  },
+  "finance_outstanding_total": {
+    "id": "finance_outstanding_total",
+    "module": "finance",
+    "entity": "Receivables",
+    "description": "Total outstanding receivable amount across customers",
+    "keywords": [
+      "total outstanding",
+      "outstanding amount",
+      "receivable total",
+      "total receivable",
+      "money owed to us",
+      "outstanding balance"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "customer_name": "string"
+    }
+  },
+  "finance_invoice_overdue_list": {
+    "id": "finance_invoice_overdue_list",
+    "module": "finance",
+    "entity": "Sales Invoices",
+    "description": "List sales invoices past their due date",
+    "keywords": [
+      "overdue invoice",
+      "invoice overdue",
+      "late payment invoice",
+      "past due invoice",
+      "unpaid overdue",
+      "invoice past due"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "days": "int",
+      "limit": "int"
+    }
+  },
+  "crm_lead_count": {
+    "id": "crm_lead_count",
+    "module": "crm",
+    "entity": "Leads",
+    "description": "Count sales leads, optionally filtered by stage or source",
+    "keywords": [
+      "lead count",
+      "how many lead",
+      "number of lead",
+      "count of lead",
+      "enquiry count"
+    ],
+    "output_type": "count",
+    "parameters": {
+      "stage": [
+        "NEW",
+        "QUALIFIED",
+        "PROPOSAL",
+        "WON",
+        "LOST"
+      ],
+      "source": "string"
+    }
+  },
+  "crm_lead_list": {
+    "id": "crm_lead_list",
+    "module": "crm",
+    "entity": "Leads",
+    "description": "List sales leads with company, contact, stage, owner and value",
+    "keywords": [
+      "list lead",
+      "show lead",
+      "lead list",
+      "which lead",
+      "lead details",
+      "enquiry list"
+    ],
+    "output_type": "list",
+    "parameters": {
+      "stage": [
+        "NEW",
+        "QUALIFIED",
+        "PROPOSAL",
+        "WON",
+        "LOST"
+      ],
+      "limit": "int"
+    }
+  },
+  "crm_opportunity_total_value": {
+    "id": "crm_opportunity_total_value",
+    "module": "crm",
+    "entity": "Opportunities",
+    "description": "Total value of open opportunities in the pipeline",
+    "keywords": [
+      "pipeline value",
+      "opportunity value",
+      "total opportunity",
+      "pipeline total",
+      "value of pipeline",
+      "open opportunity value"
+    ],
+    "output_type": "scalar",
+    "parameters": {
+      "stage": [
+        "QUALIFIED",
+        "PROPOSAL"
+      ]
+    }
+  }
+}

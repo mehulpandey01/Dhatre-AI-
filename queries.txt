@@ -1,0 +1,154 @@
+# Router Rescue — user queries
+# Format: <query_id><TAB><query text>
+# 150 queries. Labels are NOT provided — building them is part of the task.
+
+q001	how many purchase orders are pending approval
+q002	show me the last 10 purchase orders
+q003	how do i create a purchase order
+q004	what is the total value of approved purchase orders
+q005	how many stock items do we have
+q006	show me pending orders
+q007	list purchase orders for vendor Sharma Industries
+q008	how many employees are there
+q009	which items are below reorder level
+q010	how many are there?
+q011	show current stock
+q012	how many sales orders are confirmed
+q013	show purchase orders that are not approved
+q014	what is the stock of item CMP-4471
+q015	list employees in the production department
+q016	how many NCRs are open
+q017	approve PO097
+q018	total inventory value
+q019	how many people are present today
+q020	list open non conformance reports
+q021	how many work orders are in progress
+q022	what is the status of PO 97
+q023	show me the customer list
+q024	how do i change a PO status
+q025	how many leave requests are pending
+q026	total sales order value this quarter
+q027	which machines are down
+q028	pendin po cnt
+q029	list released work orders
+q030	how many invoices are unpaid
+q031	show me all departments
+q032	what's the weather in jaipur today
+q033	total production output yesterday
+q034	how many action items are open
+q035	total value
+q036	who joined last month
+q037	list job work orders
+q038	how many gate passes were issued this month
+q039	how many POs are pending and what does pending mean
+q040	show recent minutes of meeting
+q041	how many payments are pending
+q042	what is our rejection rate this month
+q043	po ka status kya hai
+q044	list overdue invoices
+q045	how many leads do we have
+q046	show inspection details for last week
+q047	compare this month's production output with last month
+q048	total downtime last week
+q049	list material issue slips
+q050	how many items are in the item master
+q051	who is on leave this week
+q052	delete all draft POs
+q053	show me production output by shift
+q054	how many indents are pending
+q055	list qualified leads
+q056	give me the report on how leave approval works
+q057	total outstanding receivables
+q058	how many items are in WIP
+q059	show job work vendors
+q060	count of rejected purchase orders
+q061	stock
+q062	list purchase orders with value above 5 lakh
+q063	how many customers are inactive
+q064	show me failed inspections
+q065	why is our rejection rate so high
+q066	list gate passes issued today
+q067	how much stock do we have of bearing 6204
+q068	how many meetings were held last month
+q069	list all suppliers with pending orders
+q070	show recent payments
+q071	how many GRNs were posted this month
+q072	list my action items
+q073	which machines were down yesterday and what did it cost us
+q074	how many job work POs are pending
+q075	show me all pending payments
+q076	total employee count
+q077	as per our discussion yesterday please send me that list again
+q078	list inspections that passed
+q079	how many COAs were issued
+q080	show me sales orders that are cancelled
+q081	give me top 5 vendors by purchase order value
+q082	how many gate passes are still open
+q083	list new joiners in the last 30 days
+q084	what is the stock level of raw material RM-2201
+q085	count of completed work orders
+q086	show me overdue action items
+q087	how many material issue slips this week
+q088	what is our pipeline value
+q089	list employees who resigned
+q090	total po value pending approval
+q091	which returnable gate passes are overdue
+q092	show me po numbers raised last week
+q093	how many sales invoices are partially paid
+q094	items to reorder
+q095	attendance for today
+q096	how much job work is not returned yet
+q097	list leads in proposal stage
+q098	total downtime for machine M-12
+q099	show grn list for this week
+q100	how many draft POs
+q101	Could you tell me how many purchase orders are awaiting approval?
+q102	po list please
+q103	HOW MANY EMPLOYEES ARE ACTIVE
+q104	show inventory list for warehouse A
+q105	count of critical NCRs
+q106	i need the list of open work orders
+q107	what's the total spend on purchase orders
+q108	display machine status
+q109	pending inspections count
+q110	which customers do we have in Pune
+q111	list all items in the catalogue
+q112	how many action items are done
+q113	payment list for last month
+q114	count of WIP items on line 2
+q115	show me leads from the website
+q116	how many GRNs are in draft
+q117	employee list with joining dates
+q118	total receivable from Mehta Enterprises
+q119	show low stock items
+q120	what is the rejection percentage
+q121	list dispatched sales orders
+q122	how many job work vendors are registered
+q123	opportunity pipeline total
+q124	attendance count for yesterday
+q125	list purchase orders from vendor Kiran Auto
+q126	how many items in item master under category electrical
+q127	total production quantity for item FG-880
+q128	which POs are stuck in approval
+q129	show purchase orders expiring in the next 7 days
+q130	how many open POs do we have
+q131	list recent goods receipt notes
+q132	shift wise production for today
+q133	how many active customers
+q134	show the meeting list
+q135	headcount by department
+q136	list open gate passes
+q137	how many material issues were raised
+q138	stock value total
+q139	give me the first 5 purchase orders
+q140	list all job work vendors
+q141	count of open NCRs by severity
+q142	which employees are in the quality department
+q143	total number of work orders
+q144	pending indent count
+q145	how many inspections are pending
+q146	list sales orders dispatched this month
+q147	total sales value this year
+q148	how many work orders are planned
+q149	show me the item master list
+q150	which action items are overdue
