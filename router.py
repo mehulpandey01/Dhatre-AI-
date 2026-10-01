@@ -196,15 +196,15 @@ def apply_typo_tolerance(tokens):
 
 def is_vague(tokens, query):
     """Check if query is too vague."""
-    # Single word queries (except specific ones)
-    if len(tokens) == 1 and tokens[0] not in ['stock', 'inventory', 'employees', 'customers']:
+    # Single word queries are vague
+    if len(tokens) == 1:
         return True
     
-    # Very short queries with no entity
-    if len(tokens) <= 2 and not any(token in query for token in ['po', 'so', 'grn', 'ncr', 'mom']):
-        # Check if it's just shape words
-        shape_words = ['how', 'many', 'show', 'list', 'total', 'count', 'what']
-        if all(token in shape_words for token in tokens):
+    # Very short queries with no matched keywords
+    if len(tokens) <= 2:
+        # Check if any keyword from VOCAB appears
+        has_entity_word = any(token in VOCAB for token in tokens)
+        if not has_entity_word:
             return True
     
     return False
@@ -214,70 +214,15 @@ def score_entities(tokens, query):
     """Layer 2: Score entities with phrase weighting."""
     entity_scores = {}
     
-    # Check for employee-related queries (department context)
-    # Must be checked before other entities to prevent "production/quality department" misrouting
-    employee_indicators = ['employee', 'employees', 'who', 'headcount', 'staff']
-    department_words = ['department', 'dept']
-    has_employee_context = any(ind in query for ind in employee_indicators)
-    has_department = any(dw in query for dw in department_words)
-    
-    if has_employee_context or (has_department and not any(w in query for w in ['list', 'show', 'which']) ):
-        # Boost Employees entity heavily
-        entity_scores['Employees'] = entity_scores.get('Employees', 0) + 15
-    
-    # Check for invoice-specific queries (must not confuse with sales orders)
-    if 'invoice' in query or 'invoices' in query:
-        entity_scores['Sales Invoices'] = entity_scores.get('Sales Invoices', 0) + 15
-    
-    # Check for vendor-specific or by-vendor queries
-    if 'vendor' in query or 'vendors' in query:
-        # "by vendor" or "from vendor <name>" should route to by_vendor tool
-        if 'by vendor' in query or 'from vendor' in query or 'for vendor' in query:
-            entity_scores['Purchase Orders'] = entity_scores.get('Purchase Orders', 0) + 20
-        # "job work vendor" should route to job work vendor list
-        elif 'job work' in query:
-            entity_scores['Job Work Vendors'] = entity_scores.get('Job Work Vendors', 0) + 20
-    
-    # "by department" or "headcount by department" should route to department list
-    if ('by department' in query or 'headcount by department' in query) and not has_employee_context:
-        entity_scores['Departments'] = entity_scores.get('Departments', 0) + 20
-    
-    # Multi-word phrases get higher weight
-    phrases_by_length = {
-        3: ['job work po', 'job work order', 'job work purchase', 'gate pass', 
-            'sales order', 'purchase order', 'work order', 'minutes of meeting',
-            'action item', 'item master', 'low stock', 'material issue'],
-        2: ['job work', 'sales', 'purchase', 'gate', 'quality', 'production', 
-            'finance', 'crm', 'store', 'stock', 'production output', 'shift wise',
-            'material issue']
-    }
-    
-    # Check 3-word phrases first
-    for phrase in phrases_by_length.get(3, []):
-        if phrase in query:
-            # Map phrase to entity
-            entity = phrase_to_entity(phrase)
-            if entity:
-                entity_scores[entity] = entity_scores.get(entity, 0) + 10
-    
-    # Check 2-word phrases
-    for phrase in phrases_by_length.get(2, []):
-        if phrase in query:
-            entity = phrase_to_entity(phrase)
-            if entity:
-                entity_scores[entity] = entity_scores.get(entity, 0) + 5
-    
-    # Single-word entity detection with stemming/plural handling
+    # Score entities based on keyword matching from tools
     for tool in TOOLS.values():
         entity = tool.get('entity', '')
-        
-        # Skip non-employee entities if we have strong employee context
-        if has_employee_context and entity not in ['Employees', 'Departments', 'Attendance', 'Leave Requests']:
+        if not entity:
             continue
         
         for kw in tool.get('keywords', []):
             kw_lower = kw.lower()
-            # Check if keyword appears in query (exact or with simple plural/stem match)
+            # Check if keyword appears in query (exact or with plural/stem match)
             if keyword_matches(kw_lower, query):
                 # Weight by keyword length (longer = more specific)
                 weight = len(kw_lower.split())
@@ -309,36 +254,6 @@ def keyword_matches(keyword, query):
             return True
     
     return False
-
-
-def phrase_to_entity(phrase):
-    """Map multi-word phrase to entity."""
-    mapping = {
-        'job work po': 'Job Work Purchase Orders',
-        'job work order': 'Job Work Purchase Orders',
-        'job work purchase': 'Job Work Purchase Orders',
-        'job work': 'Job Work Purchase Orders',
-        'gate pass': 'Gate Passes',
-        'sales order': 'Sales Orders',
-        'purchase order': 'Purchase Orders',
-        'work order': 'Work Orders',
-        'minutes of meeting': 'Minutes of Meeting',
-        'action item': 'Action Items',
-        'item master': 'Item Master',
-        'low stock': 'Stock Items',
-        'material issue': 'Material Issues',
-        'production output': 'Production Output',
-        'shift wise': 'Production Output',
-        'sales': 'Sales Orders',
-        'purchase': 'Purchase Orders',
-        'quality': 'Non Conformance Reports',
-        'production': 'Work Orders',
-        'finance': 'Payments',
-        'crm': 'Leads',
-        'store': 'Material Issues',
-        'stock': 'Stock Items'
-    }
-    return mapping.get(phrase)
 
 
 def detect_shape(tokens, query):
@@ -407,21 +322,6 @@ def check_special_tools(tokens, query, entity_tools, desired_shape):
 def score_tool(tool, tokens, query, desired_shape):
     """Score a tool based on keyword matches and shape."""
     score = 0
-    
-    # Special handling for by_vendor tools
-    if 'by_vendor' in tool['id'] or 'from_vendor' in tool['id']:
-        if 'by vendor' in query or 'from vendor' in query or 'for vendor' in query:
-            score += 10  # Strong boost for by-vendor queries
-    
-    # Special handling for vendor list tools
-    if 'vendor_list' in tool['id']:
-        if ('vendor' in query or 'vendors' in query) and ('list' in query or 'show' in query):
-            score += 8
-    
-    # Special handling for department list
-    if 'department_list' in tool['id']:
-        if 'by department' in query or 'headcount by department' in query:
-            score += 10
     
     # Keyword matching
     for kw in tool.get('keywords', []):
