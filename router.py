@@ -63,8 +63,11 @@ def route(query):
     if not entity_scores:
         return (None, 0.0, 'no_tool: no matching entity found')
     
-    # Get top entity
-    top_entity = max(entity_scores, key=entity_scores.get)
+    # Get top 2 entities for margin calculation
+    sorted_entities = sorted(entity_scores.items(), key=lambda x: x[1], reverse=True)
+    top_entity, top_entity_score = sorted_entities[0]
+    second_entity_score = sorted_entities[1][1] if len(sorted_entities) > 1 else 0
+    
     entity_tools = [t for t in TOOLS.values() if t.get('entity') == top_entity]
     
     # Layer 3: Shape detection as tie-breaker
@@ -105,21 +108,14 @@ def route(query):
                 # Pick the highest scoring tool with matching shape
                 top_tool, top_score = shape_matched_tools[0]
     
-    # Layer 5: Confidence from margin
-    # Recalculate after potential shape adjustment
+    # Layer 5: Confidence from margin between top entity and second entity
     top_tool_obj = TOOLS[top_tool]
     actual_shape = top_tool_obj.get('output_type')
     
-    # Get second best score for margin
-    second_score = 0
-    for tid, score in sorted_tools:
-        if tid != top_tool:
-            second_score = score
-            break
-    
-    if second_score > 0:
-        margin = top_score - second_score
-        confidence = min(0.95, 0.5 + (margin / max(top_score, 1)) * 0.5)
+    # Margin is between top entity score and second entity score
+    entity_margin = top_entity_score - second_entity_score
+    if second_entity_score > 0:
+        confidence = min(0.95, 0.5 + (entity_margin / max(top_entity_score, 1)) * 0.5)
     else:
         confidence = 0.9
     
