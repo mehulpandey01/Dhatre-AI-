@@ -59,7 +59,7 @@ def route(query):
     desired_shape = detect_shape(tokens, query_lower)
     
     # Layer 4: Special tools detection
-    special_match = check_special_tools(tokens, query_lower, entity_tools)
+    special_match = check_special_tools(tokens, query_lower, entity_tools, desired_shape)
     if special_match:
         tool_id, score = special_match
         confidence = compute_confidence([score])
@@ -355,8 +355,8 @@ def detect_shape(tokens, query):
     return None
 
 
-def check_special_tools(tokens, query, entity_tools):
-    """Layer 4: Check for special tools."""
+def check_special_tools(tokens, query, entity_tools, desired_shape):
+    """Layer 4: Check for special tools, respecting shape constraints."""
     special_keywords = {
         'expiring': ['expiring', 'expire', 'expiry', 'validity'],
         'low_stock': ['low stock', 'below reorder', 'reorder level', 'shortage'],
@@ -373,6 +373,11 @@ def check_special_tools(tokens, query, entity_tools):
                 for tool in entity_tools:
                     tool_keywords = ' '.join(tool.get('keywords', [])).lower()
                     if kw in tool_keywords:
+                        # Check if tool shape matches desired shape
+                        tool_shape = tool.get('output_type', '')
+                        if desired_shape and tool_shape != desired_shape:
+                            # Shape mismatch - don't use special tool
+                            continue
                         return (tool['id'], 10)
     
     return None
