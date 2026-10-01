@@ -81,16 +81,42 @@ def route(query):
     if top_score == 0:
         return (None, 0.0, 'no_tool: no keyword matches')
     
+    # Layer 3 (continued): If we have a desired shape, prefer tool with matching output_type
+    if desired_shape:
+        # Check if top tool matches desired shape
+        top_tool_obj = TOOLS[top_tool]
+        if top_tool_obj.get('output_type') != desired_shape:
+            # Look for a tool with matching shape in entity_tools
+            shape_matched_tools = [(tid, score) for tid, score in sorted_tools 
+                                   if TOOLS[tid].get('output_type') == desired_shape]
+            if shape_matched_tools:
+                # Pick the highest scoring tool with matching shape
+                top_tool, top_score = shape_matched_tools[0]
+    
     # Layer 5: Confidence from margin
-    if len(sorted_tools) > 1:
-        second_score = sorted_tools[1][1]
+    # Recalculate after potential shape adjustment
+    top_tool_obj = TOOLS[top_tool]
+    actual_shape = top_tool_obj.get('output_type')
+    
+    # Get second best score for margin
+    second_score = 0
+    for tid, score in sorted_tools:
+        if tid != top_tool:
+            second_score = score
+            break
+    
+    if second_score > 0:
         margin = top_score - second_score
         confidence = min(0.95, 0.5 + (margin / max(top_score, 1)) * 0.5)
     else:
         confidence = 0.9
     
+    # Lower confidence if shape doesn't match
+    if desired_shape and actual_shape != desired_shape:
+        confidence = max(0.4, confidence - 0.2)
+    
     # Boost confidence if clear match
-    if top_score > 5:
+    if top_score > 5 and actual_shape == desired_shape:
         confidence = min(0.95, confidence + 0.1)
     
     return (top_tool, confidence, f'match: {top_tool} (entity={top_entity}, shape={desired_shape})')
@@ -246,26 +272,29 @@ def detect_shape(tokens, query):
     if any(word in query for word in ['dikhao', 'dikha']):
         return 'list'
     
-    # Count indicators
-    count_words = ['how many', 'count', 'number of', 'total number', 'how much']
-    for phrase in count_words:
-        if phrase in query:
+    # Count indicators (most specific first)
+    if 'how many' in query or 'how much' in query:
+        return 'count'
+    if any(word in tokens for word in ['count', 'number']):
+        # Unless it's asking for a list of numbers
+        if 'list' not in query and 'show' not in query and 'which' not in query:
             return 'count'
     
-    # List indicators
-    list_words = ['list', 'show', 'which', 'display']
-    if any(word in tokens for word in list_words):
-        # Check it's not "how many" or "count"
-        if 'count' not in query and 'how many' not in query and 'number' not in query:
-            return 'list'
+    # List indicators (check before scalar to handle "total")
+    if any(word in tokens for word in ['list', 'show', 'which', 'display', 'give']):
+        # But not if it's clearly asking for a count or scalar
+        if 'how many' not in query and 'count' not in query and 'number of' not in query:
+            # Also not "total value" or similar scalar requests
+            if not (('total' in query or 'value' in query) and 'of' not in query):
+                return 'list'
     
-    # Scalar indicators (specific value)
-    scalar_words = ['total value', 'total', 'what is', 'value of', 'stock of']
-    for phrase in scalar_words:
-        if phrase in query:
-            # But not if it asks for "how many"
-            if 'how many' not in query and 'count' not in query:
-                return 'scalar'
+    # Scalar indicators (specific value/amount)
+    if 'total value' in query or 'value of' in query:
+        return 'scalar'
+    if any(phrase in query for phrase in ['total', 'amount', 'what is', 'stock of']):
+        # But not "total number"
+        if 'number' not in query and 'count' not in query and 'how many' not in query:
+            return 'scalar'
     
     return None
 
