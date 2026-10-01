@@ -240,7 +240,7 @@ def print_metrics(name, results, total):
         else:
             accuracy = 0.0
         
-        print(f"  threshold={threshold:.1f}: coverage={coverage:3d}, accuracy={accuracy:.3f}")
+        print(f"  threshold={threshold:.1f}: coverage={coverage:3d}, accuracy={accuracy:.3f} ({correct_count}/{coverage})")
     
     # Latency
     latencies = sorted(results['latencies'])
