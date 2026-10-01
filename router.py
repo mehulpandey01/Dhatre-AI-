@@ -210,9 +210,10 @@ def score_entities(tokens, query):
     phrases_by_length = {
         3: ['job work po', 'job work order', 'job work purchase', 'gate pass', 
             'sales order', 'purchase order', 'work order', 'minutes of meeting',
-            'action item', 'item master', 'low stock'],
+            'action item', 'item master', 'low stock', 'material issue'],
         2: ['job work', 'sales', 'purchase', 'gate', 'quality', 'production', 
-            'finance', 'crm', 'store', 'stock']
+            'finance', 'crm', 'store', 'stock', 'production output', 'shift wise',
+            'material issue']
     }
     
     # Check 3-word phrases first
@@ -230,18 +231,43 @@ def score_entities(tokens, query):
             if entity:
                 entity_scores[entity] = entity_scores.get(entity, 0) + 5
     
-    # Single-word entity detection
+    # Single-word entity detection with stemming/plural handling
     for tool in TOOLS.values():
         entity = tool.get('entity', '')
         for kw in tool.get('keywords', []):
             kw_lower = kw.lower()
-            # Check if keyword appears in query
-            if kw_lower in query:
+            # Check if keyword appears in query (exact or with simple plural/stem match)
+            if keyword_matches(kw_lower, query):
                 # Weight by keyword length (longer = more specific)
                 weight = len(kw_lower.split())
                 entity_scores[entity] = entity_scores.get(entity, 0) + weight
     
     return entity_scores
+
+
+def keyword_matches(keyword, query):
+    """Check if keyword matches query with plural/stem tolerance."""
+    # Exact match
+    if keyword in query:
+        return True
+    
+    # Handle plurals: "payment" matches "payments", "lead" matches "leads"
+    if keyword + 's' in query:
+        return True
+    
+    # Handle "wise" suffix: "shift" matches "shift wise"
+    if keyword + ' wise' in query or keyword + 'wise' in query:
+        return True
+    
+    # Handle compound words: "material issue" as "material issues"
+    if ' ' in keyword:
+        # Try with 's' on last word
+        parts = keyword.split()
+        plural_kw = ' '.join(parts[:-1] + [parts[-1] + 's'])
+        if plural_kw in query:
+            return True
+    
+    return False
 
 
 def phrase_to_entity(phrase):
@@ -259,6 +285,9 @@ def phrase_to_entity(phrase):
         'action item': 'Action Items',
         'item master': 'Item Master',
         'low stock': 'Stock Items',
+        'material issue': 'Material Issues',
+        'production output': 'Production Output',
+        'shift wise': 'Production Output',
         'sales': 'Sales Orders',
         'purchase': 'Purchase Orders',
         'quality': 'Non Conformance Reports',
