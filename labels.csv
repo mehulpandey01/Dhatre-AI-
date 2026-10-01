@@ -34,9 +34,9 @@ q032,what's the weather in jaipur today,out_of_scope,,,,yes,,none,5,,no,external
 q033,total production output yesterday,single_tool,production_output_total,,,no,period=yesterday,none,5,,no,,dev
 q034,how many action items are open,single_tool,mom_action_item_count,,,no,status=OPEN,none,5,,no,,dev
 q035,total value,needs_clarification,,,purchase_po_total_value,yes,,high,5,vague,no,no entity specified,dev
-q036,who joined last month,single_tool,hr_new_joiners_list,,,no,days=30,none,5,,no,,dev
+q036,who joined last month,lossy_fit,,,hr_new_joiners_list,no,days=30,none,5,,yes,'last month' is ~30 days but not exact - lossy mapping to days param,dev
 q037,list job work orders,single_tool,jobwork_po_list,,,no,,none,5,,no,,dev
-q038,how many gate passes were issued this month,single_tool,gatepass_count,,,no,,none,4,,no,no period param but query implies it,dev
+q038,how many gate passes were issued this month,lossy_fit,,,gatepass_count,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q039,how many POs are pending and what does pending mean,multi_intent,purchase_po_count,,,no,approval_status=PENDING,low,4,multi-intent,yes,count query plus definition request,dev
 q040,show recent minutes of meeting,single_tool,mom_list,,,no,,none,5,,no,,dev
 q041,how many payments are pending,single_tool,finance_payment_pending_count,,,no,,none,5,,no,,dev
@@ -44,12 +44,12 @@ q042,what is our rejection rate this month,single_tool,quality_rejection_rate,,,
 q043,po ka status kya hai,lossy_fit,,,purchase_po_list,no,,low,4,hinglish,yes,same as q022 - no single PO status tool,dev
 q044,list overdue invoices,single_tool,finance_invoice_overdue_list,,,no,,none,5,,no,,dev
 q045,how many leads do we have,single_tool,crm_lead_count,,,no,,none,5,,no,,dev
-q046,show inspection details for last week,single_tool,quality_inspection_list,,,no,,none,4,,no,no period param in tool,dev
+q046,show inspection details for last week,lossy_fit,,,quality_inspection_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q047,compare this month's production output with last month,no_tool,,,production_output_total,yes,,none,5,,yes,no comparison tool exists,dev
 q048,total downtime last week,single_tool,production_downtime_total,,,no,period=last week,none,5,,no,,dev
 q049,list material issue slips,single_tool,store_issue_list,,,no,,none,5,,no,,dev
 q050,how many items are in the item master,single_tool,inventory_item_master_count,,,no,,none,5,,no,,dev
-q051,who is on leave this week,single_tool,hr_leave_list,,,no,,none,4,,no,no period param in tool,dev
+q051,who is on leave this week,lossy_fit,,,hr_leave_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q052,delete all draft POs,refuse_mutation,,,purchase_po_count,yes,,none,5,,no,destructive write operation,dev
 q053,show me production output by shift,single_tool,production_shift_output,,,no,,none,5,,no,,dev
 q054,how many indents are pending,single_tool,store_indent_pending_count,,,no,,none,5,,no,,dev
@@ -64,12 +64,12 @@ q062,list purchase orders with value above 5 lakh,lossy_fit,,,purchase_po_list,n
 q063,how many customers are inactive,single_tool,sales_customer_count,,,no,active=false,none,5,,no,,dev
 q064,show me failed inspections,single_tool,quality_inspection_list,,,no,result=FAIL,none,5,,no,,dev
 q065,why is our rejection rate so high,no_tool,,,quality_rejection_rate,yes,,none,5,,yes,asks why - needs analysis not available in query tools,dev
-q066,list gate passes issued today,single_tool,gatepass_list,,,no,,none,4,,no,no period param in tool,dev
-q067,how much stock do we have of bearing 6204,single_tool,inventory_stock_by_item,,,no,item_code=bearing 6204,none,5,,no,,dev
+q066,list gate passes issued today,lossy_fit,,,gatepass_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
+q067,how much stock do we have of bearing 6204,lossy_fit,,,inventory_stock_by_item,no,item_code=bearing 6204,none,5,,yes,'bearing 6204' is description not item_code - tool expects code,dev
 q068,how many meetings were held last month,single_tool,mom_count,,,no,period=last month,none,5,,no,,dev
 q069,list all suppliers with pending orders,no_tool,,,purchase_po_by_vendor,yes,,none,5,,yes,no vendor aggregation tool exists,dev
 q070,show recent payments,single_tool,finance_payment_list,,,no,,none,5,,no,,dev
-q071,how many GRNs were posted this month,single_tool,purchase_grn_count,,,no,status=POSTED,none,4,,no,no period param in tool,dev
+q071,how many GRNs were posted this month,lossy_fit,,,purchase_grn_count,no,status=POSTED,none,4,,yes,'this month' time filter cannot be expressed - tool has no period param,dev
 q072,list my action items,single_tool,mom_action_item_list,,,no,owner=current_user,none,5,,no,,dev
 q073,which machines were down yesterday and what did it cost us,multi_intent,production_machine_status_list,,,no,status=DOWN,low,4,multi-intent,yes,status query plus cost calculation,dev
 q074,how many job work POs are pending,single_tool,jobwork_po_count,,,no,status=PENDING,none,5,,no,,dev
@@ -87,17 +87,17 @@ q085,count of completed work orders,single_tool,production_workorder_count,,,no,
 q086,show me overdue action items,single_tool,mom_action_item_list,,,no,status=OVERDUE,none,5,,no,,dev
 q087,how many material issue slips this week,single_tool,store_issue_count,,,no,,none,4,,no,no period param in tool,dev
 q088,what is our pipeline value,single_tool,crm_opportunity_total_value,,,no,,none,5,,no,,dev
-q089,list employees who resigned,single_tool,hr_employee_list,,,no,,none,4,,yes,hr_employee_list has no status param - resigned info may be in other fields,dev
+q089,list employees who resigned,lossy_fit,,,hr_employee_list,no,,none,4,,yes,'resigned' status cannot be expressed - tool has no status param,dev
 q090,total po value pending approval,single_tool,purchase_po_total_value,,,no,approval_status=PENDING,none,5,,no,,dev
 q091,which returnable gate passes are overdue,lossy_fit,,,gatepass_pending_return_count,no,,low,3,,yes,wants list but only count tool exists,dev
-q092,show me po numbers raised last week,single_tool,purchase_po_list,,,no,,none,4,,no,no period param in tool,dev
+q092,show me po numbers raised last week,lossy_fit,,,purchase_po_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q093,how many sales invoices are partially paid,single_tool,sales_invoice_count,,,no,payment_status=PARTIAL,none,5,,no,,dev
 q094,items to reorder,single_tool,inventory_low_stock_list,,,no,,none,5,,no,,dev
 q095,attendance for today,single_tool,hr_attendance_today,,,no,,none,5,,yes,simple query but marking for review per instructions,dev
 q096,how much job work is not returned yet,single_tool,jobwork_pending_count,,,no,,none,5,,no,,dev
 q097,list leads in proposal stage,single_tool,crm_lead_list,,,no,stage=PROPOSAL,none,5,,no,,dev
 q098,total downtime for machine M-12,single_tool,production_downtime_total,,,no,machine_code=M-12,none,5,,no,,dev
-q099,show grn list for this week,single_tool,purchase_grn_list,,,no,,none,4,,no,no period param in tool,dev
+q099,show grn list for this week,lossy_fit,,,purchase_grn_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q100,how many draft POs,single_tool,purchase_po_count,,,no,approval_status=DRAFT,none,5,,no,,dev
 q101,Could you tell me how many purchase orders are awaiting approval?,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,5,polite,no,,dev
 q102,po list please,single_tool,purchase_po_list,,,no,,none,5,polite,no,,dev
@@ -111,7 +111,7 @@ q109,pending inspections count,single_tool,quality_inspection_pending_count,,,no
 q110,which customers do we have in Pune,lossy_fit,,,sales_customer_list,no,,low,4,,yes,tool lists customers with city but cannot filter by city,dev
 q111,list all items in the catalogue,single_tool,inventory_item_master_list,,,no,,none,5,,no,,dev
 q112,how many action items are done,single_tool,mom_action_item_count,,,no,status=DONE,none,5,,no,,dev
-q113,payment list for last month,single_tool,finance_payment_list,,,no,,none,4,,no,no period param in tool,dev
+q113,payment list for last month,lossy_fit,,,finance_payment_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q114,count of WIP items on line 2,single_tool,production_wip_count,,,no,line=2,none,5,,no,,dev
 q115,show me leads from the website,lossy_fit,,,crm_lead_list,no,,low,4,,yes,crm_lead_list has no source filter - crm_lead_count has it but wrong shape,dev
 q116,how many GRNs are in draft,single_tool,purchase_grn_count,,,no,status=DRAFT,none,5,,no,,dev
@@ -128,7 +128,7 @@ q126,how many items in item master under category electrical,single_tool,invento
 q127,total production quantity for item FG-880,single_tool,production_output_total,,,no,item_code=FG-880,none,5,,no,,dev
 q128,which POs are stuck in approval,single_tool,purchase_po_pending_approval_list,,,no,,none,5,,no,,dev
 q129,show purchase orders expiring in the next 7 days,single_tool,purchase_po_expiring,,,no,days=7,none,5,,no,,dev
-q130,how many open POs do we have,single_tool,purchase_po_count,,,no,po_type=OPEN,none,5,,no,,dev
+q130,how many open POs do we have,single_tool,purchase_po_count,,,no,po_type=OPEN,high,5,,yes,'open' could mean po_type=OPEN or approval_status for not-closed POs - ambiguous,dev
 q131,list recent goods receipt notes,single_tool,purchase_grn_list,,,no,,none,5,,no,,dev
 q132,shift wise production for today,single_tool,production_shift_output,,,no,date=today,none,5,,no,,dev
 q133,how many active customers,single_tool,sales_customer_count,,,no,active=true,none,5,,no,,dev
@@ -144,7 +144,7 @@ q142,which employees are in the quality department,single_tool,hr_employee_list,
 q143,total number of work orders,single_tool,production_workorder_count,,,no,,none,5,,no,,dev
 q144,pending indent count,single_tool,store_indent_pending_count,,,no,,none,5,,no,,dev
 q145,how many inspections are pending,single_tool,quality_inspection_pending_count,,,no,,none,5,,no,,dev
-q146,list sales orders dispatched this month,single_tool,sales_so_list,,,no,status=DISPATCHED,none,4,,no,no period param in tool,dev
+q146,list sales orders dispatched this month,lossy_fit,,,sales_so_list,no,,none,4,,yes,time filter in query cannot be expressed - tool has no date/days/period param,dev
 q147,total sales value this year,single_tool,sales_so_total_value,,,no,period=this year,none,5,,no,,dev
 q148,how many work orders are planned,single_tool,production_workorder_count,,,no,status=PLANNED,none,5,,no,,dev
 q149,show me the item master list,single_tool,inventory_item_master_list,,,no,,none,5,,no,,dev
