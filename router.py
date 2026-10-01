@@ -15,23 +15,42 @@ HERE = Path(__file__).parent
 with open(HERE / 'tools.json') as f:
     TOOLS = json.load(f)
 
-# Build vocabulary of all tokens in keywords
-VOCAB = set()
-for tool in TOOLS.values():
-    for kw in tool.get('keywords', []):
-        VOCAB.update(kw.lower().split())
+# Stopwords and shape words to exclude from entity vocabulary
+STOPWORDS = {'the', 'a', 'an', 'of', 'in', 'on', 'at', 'to', 'for', 'with', 'by', 'from', 
+             'how', 'many', 'show', 'list', 'total', 'count', 'what', 'which', 'give', 'get',
+             'me', 'all', 'are', 'is', 'was', 'be', 'this', 'that', 'or', 'and'}
 
-# Build entity names set and keyword-to-entity mapping
-ENTITY_NAMES = set()
-KEYWORD_TO_ENTITY = {}
+# Build vocabulary from keywords and entity vocabulary from entity names + descriptions
+VOCAB = set()
+ENTITY_VOCAB = {}  # entity -> set of tokens (entity name + description words)
+
 for tool in TOOLS.values():
     entity = tool.get('entity', '')
+    
+    # Add keywords to main vocab
+    for kw in tool.get('keywords', []):
+        VOCAB.update(kw.lower().split())
+    
+    # Build entity vocabulary from entity name and description
     if entity:
-        ENTITY_NAMES.add(entity)
-        for kw in tool.get('keywords', []):
-            kw_lower = kw.lower()
-            if kw_lower not in KEYWORD_TO_ENTITY:
-                KEYWORD_TO_ENTITY[kw_lower] = entity
+        if entity not in ENTITY_VOCAB:
+            ENTITY_VOCAB[entity] = set()
+        
+        # Add stemmed tokens from entity name
+        for token in entity.lower().split():
+            # Simple stemming: remove trailing 's' for plurals
+            stem = token.rstrip('s') if len(token) > 3 and token.endswith('s') else token
+            if stem not in STOPWORDS:
+                ENTITY_VOCAB[entity].add(stem)
+                ENTITY_VOCAB[entity].add(token)  # also keep original
+        
+        # Add tokens from description (minus stopwords)
+        desc = tool.get('description', '').lower()
+        for token in re.findall(r'\b\w+\b', desc):
+            stem = token.rstrip('s') if len(token) > 3 and token.endswith('s') else token
+            if stem not in STOPWORDS and len(token) > 2:
+                ENTITY_VOCAB[entity].add(stem)
+                ENTITY_VOCAB[entity].add(token)
 
 
 def route(query):
@@ -220,13 +239,22 @@ def score_entities(tokens, query):
         if not entity:
             continue
         
+        # Multi-word keyword matching (higher weight)
         for kw in tool.get('keywords', []):
             kw_lower = kw.lower()
-            # Check if keyword appears in query (exact or with plural/stem match)
             if keyword_matches(kw_lower, query):
                 # Weight by keyword length (longer = more specific)
-                weight = len(kw_lower.split())
+                weight = len(kw_lower.split()) * 3
                 entity_scores[entity] = entity_scores.get(entity, 0) + weight
+        
+        # Entity vocabulary matching (from entity name + description)
+        if entity in ENTITY_VOCAB:
+            for token in tokens:
+                # Simple stem
+                stem = token.rstrip('s') if len(token) > 3 and token.endswith('s') else token
+                if token in ENTITY_VOCAB[entity] or stem in ENTITY_VOCAB[entity]:
+                    # Lower weight than multi-word keywords
+                    entity_scores[entity] = entity_scores.get(entity, 0) + 2
     
     return entity_scores
 
