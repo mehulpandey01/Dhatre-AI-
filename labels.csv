@@ -1,151 +1,151 @@
-query_id,query,label_type,expected_tool,acceptable_alt_tools,closest_tool,should_abstain,expected_params,ambiguity,label_confidence,tags,review,notes
-q001,how many purchase orders are pending approval,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,5,,no,
-q002,show me the last 10 purchase orders,single_tool,purchase_po_list,,,no,limit=10,none,5,,no,
-q003,how do i create a purchase order,not_a_data_query,,,purchase_po_list,yes,,none,5,,no,procedural question
-q004,what is the total value of approved purchase orders,single_tool,purchase_po_total_value,,,no,approval_status=APPROVED,none,5,,no,
-q005,how many stock items do we have,single_tool,inventory_stock_count,,,no,,none,5,,no,
-q006,show me pending orders,ambiguous,purchase_po_list,"sales_so_list,production_workorder_list,finance_payment_list",,no,status=PENDING,high,3,,yes,could be PO/SO/WO/payments
-q007,list purchase orders for vendor Sharma Industries,single_tool,purchase_po_by_vendor,,,no,vendor_name=Sharma Industries,none,5,,no,
-q008,how many employees are there,single_tool,hr_employee_count,,,no,,none,5,,no,
-q009,which items are below reorder level,single_tool,inventory_low_stock_list,,,no,,none,5,,no,
-q010,how many are there?,needs_clarification,,,purchase_po_count,yes,,high,5,vague,no,no entity specified
-q011,show current stock,single_tool,inventory_stock_list,,,no,,none,5,,no,
-q012,how many sales orders are confirmed,single_tool,sales_so_count,,,no,status=CONFIRMED,none,5,,no,
-q013,show purchase orders that are not approved,single_tool,purchase_po_list,,,no,approval_status=PENDING,none,5,,no,
-q014,what is the stock of item CMP-4471,single_tool,inventory_stock_by_item,,,no,item_code=CMP-4471,none,5,,no,
-q015,list employees in the production department,single_tool,hr_employee_list,,,no,department=production,none,5,,no,
-q016,how many NCRs are open,single_tool,quality_ncr_count,,,no,status=OPEN,none,5,,no,
-q017,approve PO097,refuse_mutation,,,purchase_po_list,yes,,none,5,,no,write operation
-q018,total inventory value,single_tool,inventory_stock_value_total,,,no,,none,5,,no,
-q019,how many people are present today,single_tool,hr_attendance_today,,,no,status=PRESENT,none,5,,no,hr_attendance_today takes date param
-q020,list open non conformance reports,single_tool,quality_ncr_list,,,no,status=OPEN,none,5,,no,
-q021,how many work orders are in progress,single_tool,production_workorder_count,,,no,status=IN_PROGRESS,none,5,,no,
-q022,what is the status of PO 97,lossy_fit,,,purchase_po_list,no,,low,4,,yes,would need to search list for PO 97
-q023,show me the customer list,single_tool,sales_customer_list,,,no,,none,5,,no,
-q024,how do i change a PO status,not_a_data_query,,,purchase_po_list,yes,,none,5,,no,procedural question
-q025,how many leave requests are pending,single_tool,hr_leave_pending_count,,,no,,none,5,,no,
-q026,total sales order value this quarter,single_tool,sales_so_total_value,,,no,period=this quarter,none,5,,no,
-q027,which machines are down,single_tool,production_machine_status_list,,,no,status=DOWN,none,5,,no,
-q028,pendin po cnt,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,4,typo,no,typo but clear intent
-q029,list released work orders,single_tool,production_workorder_list,,,no,status=RELEASED,none,5,,no,
-q030,how many invoices are unpaid,single_tool,sales_invoice_count,,,no,payment_status=UNPAID,none,5,,no,
-q031,show me all departments,single_tool,hr_department_list,,,no,,none,5,,no,
-q032,what's the weather in jaipur today,out_of_scope,,,,yes,,none,5,,no,external to ERP domain
-q033,total production output yesterday,single_tool,production_output_total,,,no,period=yesterday,none,5,,no,
-q034,how many action items are open,single_tool,mom_action_item_count,,,no,status=OPEN,none,5,,no,
-q035,total value,needs_clarification,,,purchase_po_total_value,yes,,high,5,vague,no,no entity specified
-q036,who joined last month,single_tool,hr_new_joiners_list,,,no,days=30,none,5,,no,
-q037,list job work orders,single_tool,jobwork_po_list,,,no,,none,5,,no,
-q038,how many gate passes were issued this month,single_tool,gatepass_count,,,no,,none,4,,no,no period param but query implies it
-q039,"how many POs are pending and what does pending mean",multi_intent,purchase_po_count,,,no,approval_status=PENDING,low,4,multi-intent,no,count query plus definition request
-q040,show recent minutes of meeting,single_tool,mom_list,,,no,,none,5,,no,
-q041,how many payments are pending,single_tool,finance_payment_pending_count,,,no,,none,5,,no,
-q042,what is our rejection rate this month,single_tool,quality_rejection_rate,,,no,period=this month,none,5,,no,
-q043,po ka status kya hai,lossy_fit,,,purchase_po_list,no,,low,4,hinglish,yes,same as q022 but in Hindi
-q044,list overdue invoices,single_tool,finance_invoice_overdue_list,,,no,,none,5,,no,
-q045,how many leads do we have,single_tool,crm_lead_count,,,no,,none,5,,no,
-q046,show inspection details for last week,single_tool,quality_inspection_list,,,no,,none,4,,no,no period param in tool
-q047,compare this month's production output with last month,no_tool,,,production_output_total,yes,,none,5,,no,no comparison tool exists
-q048,total downtime last week,single_tool,production_downtime_total,,,no,period=last week,none,5,,no,
-q049,list material issue slips,single_tool,store_issue_list,,,no,,none,5,,no,
-q050,how many items are in the item master,single_tool,inventory_item_master_count,,,no,,none,5,,no,
-q051,who is on leave this week,single_tool,hr_leave_list,,,no,,none,4,,no,no period param in tool
-q052,delete all draft POs,refuse_mutation,,,purchase_po_count,yes,,none,5,,no,destructive write operation
-q053,show me production output by shift,single_tool,production_shift_output,,,no,,none,5,,no,
-q054,how many indents are pending,single_tool,store_indent_pending_count,,,no,,none,5,,no,
-q055,list qualified leads,single_tool,crm_lead_list,,,no,stage=QUALIFIED,none,5,,no,
-q056,give me the report on how leave approval works,not_a_data_query,,,hr_leave_list,yes,,none,5,,no,procedural explanation request
-q057,total outstanding receivables,single_tool,finance_outstanding_total,,,no,,none,5,,no,
-q058,how many items are in WIP,single_tool,production_wip_count,,,no,,none,5,,no,
-q059,show job work vendors,single_tool,jobwork_vendor_list,,,no,,none,5,,no,
-q060,count of rejected purchase orders,single_tool,purchase_po_count,,,no,approval_status=REJECTED,none,5,,no,
-q061,stock,needs_clarification,,,inventory_stock_list,yes,,high,5,vague,no,no entity or action specified
-q062,list purchase orders with value above 5 lakh,lossy_fit,,,purchase_po_list,no,,low,4,,no,tool lists POs but cannot filter by value
-q063,how many customers are inactive,single_tool,sales_customer_count,,,no,active=false,none,5,,no,
-q064,show me failed inspections,single_tool,quality_inspection_list,,,no,result=FAIL,none,5,,no,
-q065,why is our rejection rate so high,not_a_data_query,,,quality_rejection_rate,yes,,none,5,,no,asks for explanation not data
-q066,list gate passes issued today,single_tool,gatepass_list,,,no,,none,4,,no,no period param in tool
-q067,how much stock do we have of bearing 6204,single_tool,inventory_stock_by_item,,,no,item_code=bearing 6204,none,5,,no,
-q068,how many meetings were held last month,single_tool,mom_count,,,no,period=last month,none,5,,no,
-q069,list all suppliers with pending orders,no_tool,,,purchase_po_by_vendor,yes,,none,5,,no,no vendor aggregation tool exists
-q070,show recent payments,single_tool,finance_payment_list,,,no,,none,5,,no,
-q071,how many GRNs were posted this month,single_tool,purchase_grn_count,,,no,status=POSTED,none,4,,no,no period param in tool
-q072,list my action items,single_tool,mom_action_item_list,,,no,owner=current_user,none,5,,no,
-q073,"which machines were down yesterday and what did it cost us",multi_intent,production_machine_status_list,,,no,status=DOWN,low,4,multi-intent,no,status query plus cost calculation
-q074,how many job work POs are pending,single_tool,jobwork_po_count,,,no,status=PENDING,none,5,,no,
-q075,show me all pending payments,single_tool,finance_payment_list,,,no,status=PENDING,none,5,,no,
-q076,total employee count,single_tool,hr_employee_count,,,no,,none,5,,no,
-q077,as per our discussion yesterday please send me that list again,needs_clarification,,,,yes,,high,5,followup,no,requires session context
-q078,list inspections that passed,single_tool,quality_inspection_list,,,no,result=PASS,none,5,,no,
-q079,how many COAs were issued,single_tool,quality_coa_count,,,no,status=ISSUED,none,5,,no,
-q080,show me sales orders that are cancelled,single_tool,sales_so_list,,,no,status=CANCELLED,none,5,,no,
-q081,give me top 5 vendors by purchase order value,no_tool,,,purchase_po_by_vendor,yes,,none,5,,no,no ranking or aggregation tool
-q082,how many gate passes are still open,single_tool,gatepass_count,,,no,status=OPEN,none,5,,no,
-q083,list new joiners in the last 30 days,single_tool,hr_new_joiners_list,,,no,days=30,none,5,,no,
-q084,what is the stock level of raw material RM-2201,single_tool,inventory_stock_by_item,,,no,item_code=RM-2201,none,5,,no,
-q085,count of completed work orders,single_tool,production_workorder_count,,,no,status=COMPLETED,none,5,,no,
-q086,show me overdue action items,single_tool,mom_action_item_list,,,no,status=OVERDUE,none,5,,no,
-q087,how many material issue slips this week,single_tool,store_issue_count,,,no,,none,4,,no,no period param in tool
-q088,what is our pipeline value,single_tool,crm_opportunity_total_value,,,no,,none,5,,no,
-q089,list employees who resigned,single_tool,hr_employee_list,,,no,status=RESIGNED,none,5,,no,
-q090,total po value pending approval,single_tool,purchase_po_total_value,,,no,approval_status=PENDING,none,5,,no,
-q091,which returnable gate passes are overdue,lossy_fit,,,gatepass_pending_return_count,no,,low,3,,yes,wants list but only count tool exists
-q092,show me po numbers raised last week,single_tool,purchase_po_list,,,no,,none,4,,no,no period param in tool
-q093,how many sales invoices are partially paid,single_tool,sales_invoice_count,,,no,payment_status=PARTIAL,none,5,,no,
-q094,items to reorder,single_tool,inventory_low_stock_list,,,no,,none,5,,no,
-q095,attendance for today,single_tool,hr_attendance_today,,,no,,none,5,,no,
-q096,how much job work is not returned yet,single_tool,jobwork_pending_count,,,no,,none,5,,no,
-q097,list leads in proposal stage,single_tool,crm_lead_list,,,no,stage=PROPOSAL,none,5,,no,
-q098,total downtime for machine M-12,single_tool,production_downtime_total,,,no,machine_code=M-12,none,5,,no,
-q099,show grn list for this week,single_tool,purchase_grn_list,,,no,,none,4,,no,no period param in tool
-q100,how many draft POs,single_tool,purchase_po_count,,,no,approval_status=DRAFT,none,5,,no,
-q101,Could you tell me how many purchase orders are awaiting approval?,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,5,polite,no,
-q102,po list please,single_tool,purchase_po_list,,,no,,none,5,polite,no,
-q103,HOW MANY EMPLOYEES ARE ACTIVE,single_tool,hr_employee_count,,,no,status=ACTIVE,none,5,allcaps,no,
-q104,show inventory list for warehouse A,single_tool,inventory_stock_list,,,no,warehouse=A,none,5,,no,
-q105,count of critical NCRs,single_tool,quality_ncr_count,,,no,severity=CRITICAL,none,5,,no,
-q106,i need the list of open work orders,single_tool,production_workorder_list,,,no,status=OPEN,none,5,,no,
-q107,what's the total spend on purchase orders,single_tool,purchase_po_total_value,,,no,,none,5,,no,
-q108,display machine status,single_tool,production_machine_status_list,,,no,,none,5,,no,
-q109,pending inspections count,single_tool,quality_inspection_pending_count,,,no,,none,5,,no,
-q110,which customers do we have in Pune,lossy_fit,,,sales_customer_list,no,,low,4,,no,tool lists customers with city but cannot filter by city
-q111,list all items in the catalogue,single_tool,inventory_item_master_list,,,no,,none,5,,no,
-q112,how many action items are done,single_tool,mom_action_item_count,,,no,status=DONE,none,5,,no,
-q113,payment list for last month,single_tool,finance_payment_list,,,no,,none,4,,no,no period param in tool
-q114,count of WIP items on line 2,single_tool,production_wip_count,,,no,line=2,none,5,,no,
-q115,show me leads from the website,single_tool,crm_lead_list,,,no,source=website,none,5,,no,
-q116,how many GRNs are in draft,single_tool,purchase_grn_count,,,no,status=DRAFT,none,5,,no,
-q117,employee list with joining dates,single_tool,hr_employee_list,,,no,,none,5,,no,
-q118,total receivable from Mehta Enterprises,single_tool,finance_outstanding_total,,,no,customer_name=Mehta Enterprises,none,5,,no,
-q119,show low stock items,single_tool,inventory_low_stock_list,,,no,,none,5,,no,
-q120,what is the rejection percentage,single_tool,quality_rejection_rate,,,no,,none,5,,no,
-q121,list dispatched sales orders,single_tool,sales_so_list,,,no,status=DISPATCHED,none,5,,no,
-q122,how many job work vendors are registered,lossy_fit,,,jobwork_vendor_list,no,,low,3,,yes,asks count but only list tool exists
-q123,opportunity pipeline total,single_tool,crm_opportunity_total_value,,,no,,none,5,,no,
-q124,attendance count for yesterday,single_tool,hr_attendance_today,,,no,date=yesterday,none,5,,no,hr_attendance_today takes date param
-q125,list purchase orders from vendor Kiran Auto,single_tool,purchase_po_by_vendor,,,no,vendor_name=Kiran Auto,none,5,,no,
-q126,how many items in item master under category electrical,single_tool,inventory_item_master_count,,,no,category=electrical,none,5,,no,
-q127,total production quantity for item FG-880,single_tool,production_output_total,,,no,item_code=FG-880,none,5,,no,
-q128,which POs are stuck in approval,single_tool,purchase_po_pending_approval_list,,,no,,none,5,,no,
-q129,show purchase orders expiring in the next 7 days,single_tool,purchase_po_expiring,,,no,days=7,none,5,,no,
-q130,how many open POs do we have,single_tool,purchase_po_count,,,no,po_type=OPEN,none,5,,no,
-q131,list recent goods receipt notes,single_tool,purchase_grn_list,,,no,,none,5,,no,
-q132,shift wise production for today,single_tool,production_shift_output,,,no,date=today,none,5,,no,
-q133,how many active customers,single_tool,sales_customer_count,,,no,active=true,none,5,,no,
-q134,show the meeting list,single_tool,mom_list,,,no,,none,5,,no,
-q135,headcount by department,single_tool,hr_department_list,,,no,,none,5,,no,hr_department_list outputs headcount per department
-q136,list open gate passes,single_tool,gatepass_list,,,no,status=OPEN,none,5,,no,
-q137,how many material issues were raised,single_tool,store_issue_count,,,no,,none,5,,no,
-q138,stock value total,single_tool,inventory_stock_value_total,,,no,,none,5,,no,
-q139,give me the first 5 purchase orders,single_tool,purchase_po_list,,,no,limit=5,none,5,,no,
-q140,list all job work vendors,single_tool,jobwork_vendor_list,,,no,,none,5,,no,
-q141,count of open NCRs by severity,lossy_fit,,,quality_ncr_count,no,status=OPEN,low,4,,yes,tool can filter by severity but cannot group/aggregate
-q142,which employees are in the quality department,single_tool,hr_employee_list,,,no,department=quality,none,5,,no,
-q143,total number of work orders,single_tool,production_workorder_count,,,no,,none,5,,no,
-q144,pending indent count,single_tool,store_indent_pending_count,,,no,,none,5,,no,
-q145,how many inspections are pending,single_tool,quality_inspection_pending_count,,,no,,none,5,,no,
-q146,list sales orders dispatched this month,single_tool,sales_so_list,,,no,status=DISPATCHED,none,4,,no,no period param in tool
-q147,total sales value this year,single_tool,sales_so_total_value,,,no,period=this year,none,5,,no,
-q148,how many work orders are planned,single_tool,production_workorder_count,,,no,status=PLANNED,none,5,,no,
-q149,show me the item master list,single_tool,inventory_item_master_list,,,no,,none,5,,no,
-q150,which action items are overdue,single_tool,mom_action_item_list,,,no,status=OVERDUE,none,5,,no,
+query_id,query,label_type,expected_tool,acceptable_alt_tools,closest_tool,should_abstain,expected_params,ambiguity,label_confidence,tags,review,notes,split
+q001,how many purchase orders are pending approval,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,5,,no,,dev
+q002,show me the last 10 purchase orders,single_tool,purchase_po_list,,,no,limit=10,none,5,,no,,dev
+q003,how do i create a purchase order,not_a_data_query,,,purchase_po_list,yes,,none,5,,no,procedural question,dev
+q004,what is the total value of approved purchase orders,single_tool,purchase_po_total_value,,,no,approval_status=APPROVED,none,5,,no,,dev
+q005,how many stock items do we have,single_tool,inventory_stock_count,,,no,,none,5,,no,,dev
+q006,show me pending orders,ambiguous,,"purchase_po_list,sales_so_list,production_workorder_list,finance_payment_list",,no,,high,3,,yes,could be PO/SO/WO/payments - needs clarification,dev
+q007,list purchase orders for vendor Sharma Industries,single_tool,purchase_po_by_vendor,,,no,vendor_name=Sharma Industries,none,5,,no,,dev
+q008,how many employees are there,single_tool,hr_employee_count,,,no,,none,5,,no,,dev
+q009,which items are below reorder level,single_tool,inventory_low_stock_list,,,no,,none,5,,no,,dev
+q010,how many are there?,needs_clarification,,,purchase_po_count,yes,,high,5,vague,no,no entity specified,dev
+q011,show current stock,single_tool,inventory_stock_list,,,no,,none,5,,no,,dev
+q012,how many sales orders are confirmed,single_tool,sales_so_count,,,no,status=CONFIRMED,none,5,,no,,dev
+q013,show purchase orders that are not approved,single_tool,purchase_po_list,,,no,approval_status=PENDING,none,5,,no,,dev
+q014,what is the stock of item CMP-4471,single_tool,inventory_stock_by_item,,,no,item_code=CMP-4471,none,5,,no,,dev
+q015,list employees in the production department,single_tool,hr_employee_list,,,no,department=production,none,5,,no,,dev
+q016,how many NCRs are open,single_tool,quality_ncr_count,,,no,status=OPEN,none,5,,no,,dev
+q017,approve PO097,refuse_mutation,,,purchase_po_list,yes,,none,5,,no,write operation,dev
+q018,total inventory value,single_tool,inventory_stock_value_total,,,no,,none,5,,no,,dev
+q019,how many people are present today,single_tool,hr_attendance_today,,,no,status=PRESENT,none,5,,no,hr_attendance_today takes date param,dev
+q020,list open non conformance reports,single_tool,quality_ncr_list,,,no,status=OPEN,none,5,,no,,dev
+q021,how many work orders are in progress,single_tool,production_workorder_count,,,no,status=IN_PROGRESS,none,5,,no,,dev
+q022,what is the status of PO 97,lossy_fit,,,purchase_po_list,no,,low,4,,yes,no single PO status tool - would need to search list,dev
+q023,show me the customer list,single_tool,sales_customer_list,,,no,,none,5,,no,,dev
+q024,how do i change a PO status,not_a_data_query,,,purchase_po_list,yes,,none,5,,no,procedural question,dev
+q025,how many leave requests are pending,single_tool,hr_leave_pending_count,,,no,,none,5,,no,,dev
+q026,total sales order value this quarter,single_tool,sales_so_total_value,,,no,period=this quarter,none,5,,no,,dev
+q027,which machines are down,single_tool,production_machine_status_list,,,no,status=DOWN,none,5,,no,,dev
+q028,pendin po cnt,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,4,typo,no,typo but clear intent,dev
+q029,list released work orders,single_tool,production_workorder_list,,,no,status=RELEASED,none,5,,no,,dev
+q030,how many invoices are unpaid,single_tool,sales_invoice_count,,,no,payment_status=UNPAID,none,5,,no,,dev
+q031,show me all departments,single_tool,hr_department_list,,,no,,none,5,,no,,dev
+q032,what's the weather in jaipur today,out_of_scope,,,,yes,,none,5,,no,external to ERP domain,dev
+q033,total production output yesterday,single_tool,production_output_total,,,no,period=yesterday,none,5,,no,,dev
+q034,how many action items are open,single_tool,mom_action_item_count,,,no,status=OPEN,none,5,,no,,dev
+q035,total value,needs_clarification,,,purchase_po_total_value,yes,,high,5,vague,no,no entity specified,dev
+q036,who joined last month,single_tool,hr_new_joiners_list,,,no,days=30,none,5,,no,,dev
+q037,list job work orders,single_tool,jobwork_po_list,,,no,,none,5,,no,,dev
+q038,how many gate passes were issued this month,single_tool,gatepass_count,,,no,,none,4,,no,no period param but query implies it,dev
+q039,how many POs are pending and what does pending mean,multi_intent,purchase_po_count,,,no,approval_status=PENDING,low,4,multi-intent,yes,count query plus definition request,dev
+q040,show recent minutes of meeting,single_tool,mom_list,,,no,,none,5,,no,,dev
+q041,how many payments are pending,single_tool,finance_payment_pending_count,,,no,,none,5,,no,,dev
+q042,what is our rejection rate this month,single_tool,quality_rejection_rate,,,no,period=this month,none,5,,no,,dev
+q043,po ka status kya hai,lossy_fit,,,purchase_po_list,no,,low,4,hinglish,yes,same as q022 - no single PO status tool,dev
+q044,list overdue invoices,single_tool,finance_invoice_overdue_list,,,no,,none,5,,no,,dev
+q045,how many leads do we have,single_tool,crm_lead_count,,,no,,none,5,,no,,dev
+q046,show inspection details for last week,single_tool,quality_inspection_list,,,no,,none,4,,no,no period param in tool,dev
+q047,compare this month's production output with last month,no_tool,,,production_output_total,yes,,none,5,,yes,no comparison tool exists,dev
+q048,total downtime last week,single_tool,production_downtime_total,,,no,period=last week,none,5,,no,,dev
+q049,list material issue slips,single_tool,store_issue_list,,,no,,none,5,,no,,dev
+q050,how many items are in the item master,single_tool,inventory_item_master_count,,,no,,none,5,,no,,dev
+q051,who is on leave this week,single_tool,hr_leave_list,,,no,,none,4,,no,no period param in tool,dev
+q052,delete all draft POs,refuse_mutation,,,purchase_po_count,yes,,none,5,,no,destructive write operation,dev
+q053,show me production output by shift,single_tool,production_shift_output,,,no,,none,5,,no,,dev
+q054,how many indents are pending,single_tool,store_indent_pending_count,,,no,,none,5,,no,,dev
+q055,list qualified leads,single_tool,crm_lead_list,,,no,stage=QUALIFIED,none,5,,no,,dev
+q056,give me the report on how leave approval works,not_a_data_query,,,hr_leave_list,yes,,none,5,,no,procedural explanation request,dev
+q057,total outstanding receivables,single_tool,finance_outstanding_total,,,no,,none,5,,no,,dev
+q058,how many items are in WIP,single_tool,production_wip_count,,,no,,none,5,,no,,dev
+q059,show job work vendors,single_tool,jobwork_vendor_list,,,no,,none,5,,no,,dev
+q060,count of rejected purchase orders,single_tool,purchase_po_count,,,no,approval_status=REJECTED,none,5,,no,,dev
+q061,stock,needs_clarification,,,inventory_stock_list,yes,,high,5,vague,no,no entity or action specified,dev
+q062,list purchase orders with value above 5 lakh,lossy_fit,,,purchase_po_list,no,,low,4,,yes,tool lists POs but cannot filter by value,dev
+q063,how many customers are inactive,single_tool,sales_customer_count,,,no,active=false,none,5,,no,,dev
+q064,show me failed inspections,single_tool,quality_inspection_list,,,no,result=FAIL,none,5,,no,,dev
+q065,why is our rejection rate so high,no_tool,,,quality_rejection_rate,yes,,none,5,,yes,asks why - needs analysis not available in query tools,dev
+q066,list gate passes issued today,single_tool,gatepass_list,,,no,,none,4,,no,no period param in tool,dev
+q067,how much stock do we have of bearing 6204,single_tool,inventory_stock_by_item,,,no,item_code=bearing 6204,none,5,,no,,dev
+q068,how many meetings were held last month,single_tool,mom_count,,,no,period=last month,none,5,,no,,dev
+q069,list all suppliers with pending orders,no_tool,,,purchase_po_by_vendor,yes,,none,5,,yes,no vendor aggregation tool exists,dev
+q070,show recent payments,single_tool,finance_payment_list,,,no,,none,5,,no,,dev
+q071,how many GRNs were posted this month,single_tool,purchase_grn_count,,,no,status=POSTED,none,4,,no,no period param in tool,dev
+q072,list my action items,single_tool,mom_action_item_list,,,no,owner=current_user,none,5,,no,,dev
+q073,which machines were down yesterday and what did it cost us,multi_intent,production_machine_status_list,,,no,status=DOWN,low,4,multi-intent,yes,status query plus cost calculation,dev
+q074,how many job work POs are pending,single_tool,jobwork_po_count,,,no,status=PENDING,none,5,,no,,dev
+q075,show me all pending payments,single_tool,finance_payment_list,,,no,status=PENDING,none,5,,no,,dev
+q076,total employee count,single_tool,hr_employee_count,,,no,,none,5,,no,,dev
+q077,as per our discussion yesterday please send me that list again,needs_clarification,,,,yes,,high,5,followup,no,requires session context,dev
+q078,list inspections that passed,single_tool,quality_inspection_list,,,no,result=PASS,none,5,,no,,dev
+q079,how many COAs were issued,single_tool,quality_coa_count,,,no,status=ISSUED,none,5,,no,,dev
+q080,show me sales orders that are cancelled,single_tool,sales_so_list,,,no,status=CANCELLED,none,5,,no,,dev
+q081,give me top 5 vendors by purchase order value,no_tool,,,purchase_po_by_vendor,yes,,none,5,,yes,no ranking or aggregation tool,dev
+q082,how many gate passes are still open,single_tool,gatepass_count,,,no,status=OPEN,none,5,,no,,dev
+q083,list new joiners in the last 30 days,single_tool,hr_new_joiners_list,,,no,days=30,none,5,,no,,dev
+q084,what is the stock level of raw material RM-2201,single_tool,inventory_stock_by_item,,,no,item_code=RM-2201,none,5,,no,,dev
+q085,count of completed work orders,single_tool,production_workorder_count,,,no,status=COMPLETED,none,5,,no,,dev
+q086,show me overdue action items,single_tool,mom_action_item_list,,,no,status=OVERDUE,none,5,,no,,dev
+q087,how many material issue slips this week,single_tool,store_issue_count,,,no,,none,4,,no,no period param in tool,dev
+q088,what is our pipeline value,single_tool,crm_opportunity_total_value,,,no,,none,5,,no,,dev
+q089,list employees who resigned,single_tool,hr_employee_list,,,no,,none,4,,yes,hr_employee_list has no status param - resigned info may be in other fields,dev
+q090,total po value pending approval,single_tool,purchase_po_total_value,,,no,approval_status=PENDING,none,5,,no,,dev
+q091,which returnable gate passes are overdue,lossy_fit,,,gatepass_pending_return_count,no,,low,3,,yes,wants list but only count tool exists,dev
+q092,show me po numbers raised last week,single_tool,purchase_po_list,,,no,,none,4,,no,no period param in tool,dev
+q093,how many sales invoices are partially paid,single_tool,sales_invoice_count,,,no,payment_status=PARTIAL,none,5,,no,,dev
+q094,items to reorder,single_tool,inventory_low_stock_list,,,no,,none,5,,no,,dev
+q095,attendance for today,single_tool,hr_attendance_today,,,no,,none,5,,no,,dev
+q096,how much job work is not returned yet,single_tool,jobwork_pending_count,,,no,,none,5,,no,,dev
+q097,list leads in proposal stage,single_tool,crm_lead_list,,,no,stage=PROPOSAL,none,5,,no,,dev
+q098,total downtime for machine M-12,single_tool,production_downtime_total,,,no,machine_code=M-12,none,5,,no,,dev
+q099,show grn list for this week,single_tool,purchase_grn_list,,,no,,none,4,,no,no period param in tool,dev
+q100,how many draft POs,single_tool,purchase_po_count,,,no,approval_status=DRAFT,none,5,,no,,dev
+q101,Could you tell me how many purchase orders are awaiting approval?,single_tool,purchase_po_count,,,no,approval_status=PENDING,none,5,polite,no,,dev
+q102,po list please,single_tool,purchase_po_list,,,no,,none,5,polite,no,,dev
+q103,HOW MANY EMPLOYEES ARE ACTIVE,single_tool,hr_employee_count,,,no,status=ACTIVE,none,5,allcaps,no,,dev
+q104,show inventory list for warehouse A,single_tool,inventory_stock_list,,,no,warehouse=A,none,5,,no,,dev
+q105,count of critical NCRs,single_tool,quality_ncr_count,,,no,severity=CRITICAL,none,5,,no,,dev
+q106,i need the list of open work orders,single_tool,production_workorder_list,,,no,status=OPEN,none,5,,no,,dev
+q107,what's the total spend on purchase orders,single_tool,purchase_po_total_value,,,no,,none,5,,no,,dev
+q108,display machine status,single_tool,production_machine_status_list,,,no,,none,5,,no,,dev
+q109,pending inspections count,single_tool,quality_inspection_pending_count,,,no,,none,5,,no,,dev
+q110,which customers do we have in Pune,lossy_fit,,,sales_customer_list,no,,low,4,,yes,tool lists customers with city but cannot filter by city,dev
+q111,list all items in the catalogue,single_tool,inventory_item_master_list,,,no,,none,5,,no,,dev
+q112,how many action items are done,single_tool,mom_action_item_count,,,no,status=DONE,none,5,,no,,dev
+q113,payment list for last month,single_tool,finance_payment_list,,,no,,none,4,,no,no period param in tool,dev
+q114,count of WIP items on line 2,single_tool,production_wip_count,,,no,line=2,none,5,,no,,dev
+q115,show me leads from the website,lossy_fit,,,crm_lead_list,no,,low,4,,yes,crm_lead_list has no source filter - crm_lead_count has it but wrong shape,dev
+q116,how many GRNs are in draft,single_tool,purchase_grn_count,,,no,status=DRAFT,none,5,,no,,dev
+q117,employee list with joining dates,single_tool,hr_employee_list,,,no,,none,5,,no,,dev
+q118,total receivable from Mehta Enterprises,single_tool,finance_outstanding_total,,,no,customer_name=Mehta Enterprises,none,5,,no,,dev
+q119,show low stock items,single_tool,inventory_low_stock_list,,,no,,none,5,,no,,dev
+q120,what is the rejection percentage,single_tool,quality_rejection_rate,,,no,,none,5,,no,,dev
+q121,list dispatched sales orders,single_tool,sales_so_list,,,no,status=DISPATCHED,none,5,,no,,dev
+q122,how many job work vendors are registered,lossy_fit,,,jobwork_vendor_list,no,,low,3,,yes,asks count but only list tool exists,dev
+q123,opportunity pipeline total,single_tool,crm_opportunity_total_value,,,no,,none,5,,no,,dev
+q124,attendance count for yesterday,single_tool,hr_attendance_today,,,no,date=yesterday,none,5,,yes,hr_attendance_today takes date param,dev
+q125,list purchase orders from vendor Kiran Auto,single_tool,purchase_po_by_vendor,,,no,vendor_name=Kiran Auto,none,5,,no,,dev
+q126,how many items in item master under category electrical,single_tool,inventory_item_master_count,,,no,category=electrical,none,5,,no,,dev
+q127,total production quantity for item FG-880,single_tool,production_output_total,,,no,item_code=FG-880,none,5,,no,,dev
+q128,which POs are stuck in approval,single_tool,purchase_po_pending_approval_list,,,no,,none,5,,no,,dev
+q129,show purchase orders expiring in the next 7 days,single_tool,purchase_po_expiring,,,no,days=7,none,5,,no,,dev
+q130,how many open POs do we have,single_tool,purchase_po_count,,,no,po_type=OPEN,none,5,,no,,dev
+q131,list recent goods receipt notes,single_tool,purchase_grn_list,,,no,,none,5,,no,,dev
+q132,shift wise production for today,single_tool,production_shift_output,,,no,date=today,none,5,,no,,dev
+q133,how many active customers,single_tool,sales_customer_count,,,no,active=true,none,5,,no,,dev
+q134,show the meeting list,single_tool,mom_list,,,no,,none,5,,no,,dev
+q135,headcount by department,single_tool,hr_department_list,,,no,,none,5,,yes,hr_department_list outputs headcount per department,dev
+q136,list open gate passes,single_tool,gatepass_list,,,no,status=OPEN,none,5,,no,,dev
+q137,how many material issues were raised,single_tool,store_issue_count,,,no,,none,5,,no,,dev
+q138,stock value total,single_tool,inventory_stock_value_total,,,no,,none,5,,no,,dev
+q139,give me the first 5 purchase orders,single_tool,purchase_po_list,,,no,limit=5,none,5,,no,,dev
+q140,list all job work vendors,single_tool,jobwork_vendor_list,,,no,,none,5,,no,,dev
+q141,count of open NCRs by severity,lossy_fit,,,quality_ncr_count,no,status=OPEN,low,4,,yes,tool can filter by severity but cannot group/aggregate,dev
+q142,which employees are in the quality department,single_tool,hr_employee_list,,,no,department=quality,none,5,,no,,dev
+q143,total number of work orders,single_tool,production_workorder_count,,,no,,none,5,,no,,dev
+q144,pending indent count,single_tool,store_indent_pending_count,,,no,,none,5,,no,,dev
+q145,how many inspections are pending,single_tool,quality_inspection_pending_count,,,no,,none,5,,no,,dev
+q146,list sales orders dispatched this month,single_tool,sales_so_list,,,no,status=DISPATCHED,none,4,,no,no period param in tool,dev
+q147,total sales value this year,single_tool,sales_so_total_value,,,no,period=this year,none,5,,no,,dev
+q148,how many work orders are planned,single_tool,production_workorder_count,,,no,status=PLANNED,none,5,,no,,dev
+q149,show me the item master list,single_tool,inventory_item_master_list,,,no,,none,5,,no,,dev
+q150,which action items are overdue,single_tool,mom_action_item_list,,,no,status=OVERDUE,none,5,,no,,dev
