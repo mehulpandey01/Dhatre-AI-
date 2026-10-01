@@ -21,6 +21,18 @@ for tool in TOOLS.values():
     for kw in tool.get('keywords', []):
         VOCAB.update(kw.lower().split())
 
+# Build entity names set and keyword-to-entity mapping
+ENTITY_NAMES = set()
+KEYWORD_TO_ENTITY = {}
+for tool in TOOLS.values():
+    entity = tool.get('entity', '')
+    if entity:
+        ENTITY_NAMES.add(entity)
+        for kw in tool.get('keywords', []):
+            kw_lower = kw.lower()
+            if kw_lower not in KEYWORD_TO_ENTITY:
+                KEYWORD_TO_ENTITY[kw_lower] = entity
+
 
 def route(query):
     """Route a query to a tool.
