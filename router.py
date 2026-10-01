@@ -201,11 +201,13 @@ def apply_typo_tolerance(tokens):
     """Layer 6: Fix typos on tokens not in vocabulary."""
     corrected = []
     for token in tokens:
-        if token in VOCAB:
+        # Only try correction on longer tokens not in vocab
+        if token in VOCAB or len(token) < 5:
             corrected.append(token)
         else:
-            # Try to find close match in vocabulary
-            matches = get_close_matches(token, VOCAB, n=1, cutoff=0.8)
+            # Try to find close match in vocabulary (single-word tokens only)
+            vocab_words = [w for w in VOCAB if ' ' not in w]  # exclude phrases
+            matches = get_close_matches(token, vocab_words, n=1, cutoff=0.8)
             if matches:
                 corrected.append(matches[0])
             else:
