@@ -99,14 +99,30 @@ Queries requiring prior conversation context (q077 "send me that list again") ar
 
 ## Changes
 
-- q022, q043: changed to lossy_fit (consistent labeling, Hinglish not an abstain reason)
+### Pass 1 (from baseline-anchored first draft)
+- Added closest_tool column, review column
+- Renamed confidence to label_confidence
+- Cleaned ambiguity to none/low/high only
+- Removed all baseline anchoring from notes
+- q022, q043: changed to lossy_fit (no PO number param exists)
 - q028: changed from needs_clarification to single_tool with typo tag
 - q047: changed from lossy_fit to no_tool (no comparison tool exists)
 - q061: changed should_abstain from no to yes (consistent with q010)
-- q065: changed from not_a_data_query (confirmed - asks why, not data)
+- q065: kept as not_a_data_query (asks why not data)
 - q069, q081: changed from lossy_fit to no_tool (no aggregation/ranking tool)
 - q091: changed from single_tool to lossy_fit (wants list, only count exists)
-- q110: changed from lossy_fit (tool shows city but cannot filter by it)
+- q110: kept as lossy_fit (tool shows city but cannot filter by it)
 - q122: changed from single_tool to lossy_fit (asks count, only list exists)
-- q135: changed from no_tool to single_tool (hr_department_list does show headcount)
-- q141: changed from lossy_fit (confirmed - tool filters but doesn't group)
+- q135: changed from no_tool to single_tool (hr_department_list shows headcount)
+- q141: kept as lossy_fit (tool filters but doesn't group)
+
+### Pass 2 (parameter validation and decisions)
+- Added split column (all rows = dev)
+- q006: removed expected_tool, moved all to acceptable_alt_tools, removed invalid status param
+- q022, q043: confirmed lossy_fit (verified no PO tools have PO number param)
+- q065: changed from not_a_data_query to no_tool (asks why - needs analysis not queries)
+- q089: removed status param (hr_employee_list has no status param)
+- q095: confirmed single_tool, ambiguity none
+- q115: changed from single_tool to lossy_fit (crm_lead_list has no source param)
+- q124: confirmed single_tool (hr_attendance_today takes date param including yesterday)
+- Added review=yes to 18 rows with judgment calls on shape/entity/params
