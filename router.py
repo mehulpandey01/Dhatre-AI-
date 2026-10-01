@@ -221,6 +221,19 @@ def score_entities(tokens, query):
     if 'invoice' in query or 'invoices' in query:
         entity_scores['Sales Invoices'] = entity_scores.get('Sales Invoices', 0) + 15
     
+    # Check for vendor-specific or by-vendor queries
+    if 'vendor' in query or 'vendors' in query:
+        # "by vendor" or "from vendor <name>" should route to by_vendor tool
+        if 'by vendor' in query or 'from vendor' in query or 'for vendor' in query:
+            entity_scores['Purchase Orders'] = entity_scores.get('Purchase Orders', 0) + 20
+        # "job work vendor" should route to job work vendor list
+        elif 'job work' in query:
+            entity_scores['Job Work Vendors'] = entity_scores.get('Job Work Vendors', 0) + 20
+    
+    # "by department" or "headcount by department" should route to department list
+    if ('by department' in query or 'headcount by department' in query) and not has_employee_context:
+        entity_scores['Departments'] = entity_scores.get('Departments', 0) + 20
+    
     # Multi-word phrases get higher weight
     phrases_by_length = {
         3: ['job work po', 'job work order', 'job work purchase', 'gate pass', 
@@ -386,6 +399,21 @@ def check_special_tools(tokens, query, entity_tools, desired_shape):
 def score_tool(tool, tokens, query, desired_shape):
     """Score a tool based on keyword matches and shape."""
     score = 0
+    
+    # Special handling for by_vendor tools
+    if 'by_vendor' in tool['id'] or 'from_vendor' in tool['id']:
+        if 'by vendor' in query or 'from vendor' in query or 'for vendor' in query:
+            score += 10  # Strong boost for by-vendor queries
+    
+    # Special handling for vendor list tools
+    if 'vendor_list' in tool['id']:
+        if ('vendor' in query or 'vendors' in query) and ('list' in query or 'show' in query):
+            score += 8
+    
+    # Special handling for department list
+    if 'department_list' in tool['id']:
+        if 'by department' in query or 'headcount by department' in query:
+            score += 10
     
     # Keyword matching
     for kw in tool.get('keywords', []):
