@@ -49,7 +49,8 @@ def evaluate_system(name, route_fn, labels):
         'missed_abstain': [],
         'wrong_confident': [],
         'by_label_type': defaultdict(lambda: {'correct': 0, 'acceptable': 0, 'wrong': 0}),
-        'latencies': []
+        'latencies': [],
+        'all_predictions': []  # Track all predictions for threshold analysis
     }
     
     for row in labels:
@@ -160,9 +161,19 @@ def evaluate_system(name, route_fn, labels):
         else:
             results['by_label_type'][label_type]['wrong'] += 1
         
-        # Wrong but confident (>=0.6)
-        if not is_correct and not is_acceptable and not is_critical and confidence >= 0.6:
+        # Wrong but confident (>=0.6) - single_tool and lossy_fit only, no missed abstains
+        if label_type in ['single_tool', 'lossy_fit'] and not is_correct and not is_acceptable and confidence >= 0.6:
             results['wrong_confident'].append((qid, query, expected or closest, tool_id, confidence, reason))
+        
+        # Track for threshold analysis
+        results['all_predictions'].append({
+            'qid': qid,
+            'label_type': label_type,
+            'confidence': confidence,
+            'is_correct': is_correct,
+            'is_acceptable': is_acceptable,
+            'tool_id': tool_id
+        })
     
     return results
 
@@ -197,8 +208,8 @@ def print_metrics(name, results, total):
     # Missed abstains
     print(f"\nMISSED ABSTAINS (should abstain but routed): {len(results['missed_abstain'])}")
     if results['missed_abstain']:
-        for qid, query, label, got, conf, reason in results['missed_abstain'][:10]:
-            print(f"  {qid}: {label} routed to {got}")
+        for qid, query, expected_label, got, conf, reason in results['missed_abstain'][:10]:
+            print(f"  {qid}: expected={expected_label}, got={got}")
             print(f"    Query: {query[:70]}")
     
     # Per label_type
@@ -219,10 +230,17 @@ def print_metrics(name, results, total):
     # Coverage vs accuracy at thresholds
     print(f"\nCOVERAGE VS ACCURACY AT THRESHOLDS:")
     for threshold in [0.5, 0.6, 0.7, 0.8]:
-        # Coverage: how many queries routed at this threshold
-        # Accuracy: of those routed, how many correct
-        # For baseline, everything is either 0.0 or 1.0
-        print(f"  threshold={threshold}: (baseline has no confidence scores)")
+        # Coverage: queries with confidence >= threshold and tool_id != None
+        # Accuracy: of those, how many correct or acceptable
+        routed = [p for p in results['all_predictions'] if p['confidence'] >= threshold and p['tool_id'] is not None]
+        coverage = len(routed)
+        if coverage > 0:
+            correct_count = sum(1 for p in routed if p['is_correct'] or p['is_acceptable'])
+            accuracy = correct_count / coverage
+        else:
+            accuracy = 0.0
+        
+        print(f"  threshold={threshold:.1f}: coverage={coverage:3d}, accuracy={accuracy:.3f}")
     
     # Latency
     latencies = sorted(results['latencies'])
