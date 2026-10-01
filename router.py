@@ -217,6 +217,10 @@ def score_entities(tokens, query):
         # Boost Employees entity heavily
         entity_scores['Employees'] = entity_scores.get('Employees', 0) + 15
     
+    # Check for invoice-specific queries (must not confuse with sales orders)
+    if 'invoice' in query or 'invoices' in query:
+        entity_scores['Sales Invoices'] = entity_scores.get('Sales Invoices', 0) + 15
+    
     # Multi-word phrases get higher weight
     phrases_by_length = {
         3: ['job work po', 'job work order', 'job work purchase', 'gate pass', 
